@@ -1,0 +1,9 @@
+﻿exemplo,dx_int,dy_int,dz_int,subpassos_esperados
+zero,0,0,0,1
+horizontal pequeno,10000,0,0,1
+horizontal no limite,25600,0,0,2
+horizontal 1 Q16.16,65536,0,0,3
+vertical 1 Q16.16,0,65536,0,1
+vertical no limite,0,153600,0,2
+diagonal,65536,65536,65536,3
+vertical 3 Q16.16,0,196608,0,2

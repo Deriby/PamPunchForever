@@ -1,0 +1,13 @@
+.godot/
+*.blend1
+build/
+reports/
+
+__pycache__/
+*.pyc
+
+# Superseded art studies and local authoring backups
+assets/source/pam_v2.blend
+assets/source/pam_v2_generator.py
+assets/source/build_art_before_world_pass.py
+docs/captures/pam-modelo-v2.png

@@ -1,0 +1,17 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://b0bsqcythuvml"
+
+[deps]
+
+files=["res://references/exemplos_subpassos.dx.translation", "res://references/exemplos_subpassos.dy.translation", "res://references/exemplos_subpassos.dz.translation", "res://references/exemplos_subpassos.subpassos.translation"]
+
+source_file="res://references/exemplos_subpassos.csv"
+dest_files=["res://references/exemplos_subpassos.dx.translation", "res://references/exemplos_subpassos.dy.translation", "res://references/exemplos_subpassos.dz.translation", "res://references/exemplos_subpassos.subpassos.translation"]
+
+[params]
+
+compress=true
+delimiter=0
