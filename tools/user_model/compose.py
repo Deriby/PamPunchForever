@@ -5,6 +5,7 @@ from PIL import Image, ImageDraw, ImageFont, ImageChops
 ROOT=Path(__file__).resolve().parents[2]
 OUT=Path('/workspace/deliverables')
 SRC=OUT/'pam_usuario'
+MOTION=OUT/'pam_cartoon_v2'
 DOC=ROOT/'docs/captures'
 BOLD='/usr/share/fonts/truetype/dejavu/DejaVuSansCondensed-Bold.ttf'
 REGULAR='/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf'
@@ -36,7 +37,7 @@ board.convert('RGB').save(OUT/'Pam_Usuario_Rig.png')
 board.convert('RGB').save(DOC/'pam-usuario-rig.png')
 
 def sequence(prefix):
-    return [Image.open(p).convert('RGB') for p in sorted(SRC.glob(prefix+'_[0-9][0-9][0-9].png'))]
+    return [Image.open(p).convert('RGB') for p in sorted(MOTION.glob(prefix+'_[0-9][0-9][0-9].png'))]
 
 combo,spin,guard,knees,run,elbows=[sequence(name) for name in ['combo','spin','guard','knees','run','elbows']]
 assert [len(s) for s in [combo,spin,guard,knees,run,elbows]]==[67,43,19,61,25,49]
@@ -95,5 +96,5 @@ for i in range(96):
     frames.append(frame)
 path=gif(frames,'Pam_Usuario_Articulacoes.gif')
 (DOC/'pam-usuario-articulacoes.gif').write_bytes(path.read_bytes())
-(DOC/'pam-usuario-verificacao.json').write_bytes((SRC/'godot_user_report.json').read_bytes())
+(DOC/'pam-usuario-verificacao.json').write_bytes((MOTION/'godot_user_report.json').read_bytes())
 print('PAM_USER_PREVIEWS_OK')

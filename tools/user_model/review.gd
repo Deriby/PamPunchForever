@@ -1,6 +1,8 @@
 extends SceneTree
 ## Validate the actual user mesh, tail repair and retargeted clips in Godot 4.4.1.
-const OUTPUT := "/workspace/deliverables/pam_usuario/"
+const OUTPUT := "/workspace/deliverables/pam_cartoon_v2/"
+const Stage = preload("res://tools/user_model/combat_stage.gd")
+var stage
 var viewport: SubViewport
 var model: Node3D
 var skeleton: Skeleton3D
@@ -30,9 +32,7 @@ func bone(name: String) -> int:
 	return index
 
 func pose(clip: String, time: float) -> void:
-	player.play(clip)
-	player.seek(time, true)
-	player.pause()
+	stage.sample(clip,time)
 	await process_frame
 
 func validate() -> void:
@@ -116,6 +116,43 @@ func validate() -> void:
 		previous = angle
 	assert(absf(rad_to_deg(total)) > 700 and absf(rad_to_deg(total)) < 740)
 	report["spin_degrees"] = rad_to_deg(total)
+	# Every striking limb must return to the same guard scale, including after
+	# an interrupted spin. Also check fractional samples, not just baked keys.
+	await pose("Guard",0)
+	var resting_scales := {}
+	for name in ["upper_arm.R","upper_arm.L","forearm.R","forearm.L","hand.R","hand.L","shin.R","foot.R"]:
+		resting_scales[name] = skeleton.get_bone_global_pose(bone(name)).basis.get_scale()
+	var recovery_error := 0.0
+	for clip in ["Jab","Cross","Kick","Combo","Spin"]:
+		await pose(clip,player.get_animation(clip).length)
+		for name: String in resting_scales:
+			recovery_error = maxf(recovery_error,resting_scales[name].distance_to(skeleton.get_bone_global_pose(bone(name)).basis.get_scale()))
+		for i in range(12):
+			await pose(clip,(i+.37)*player.get_animation(clip).length/12.0)
+			for index in range(skeleton.get_bone_count()):
+				var transform := skeleton.get_bone_global_pose(index)
+				assert(transform.origin.is_finite() and transform.basis.is_finite())
+	assert(recovery_error < .005,"Temporary scale must return to guard")
+	await pose("Spin",.5)
+	await pose("Guard",0)
+	for name: String in resting_scales:
+		assert(resting_scales[name].distance_to(skeleton.get_bone_global_pose(bone(name)).basis.get_scale()) < .005)
+	report["all_striking_limb_recovery_max_error"] = recovery_error
+	var active_frames := 0
+	var burst_frames := 0
+	for i in range(22):
+		await pose("Jab",i/30.0)
+		if stage.effects.stroke_count > 0:
+			active_frames += 1
+		if stage.effects.accent_count > 0:
+			burst_frames += 1
+	assert(active_frames >= 5 and burst_frames >= 3)
+	assert(stage.effects.stroke_count == 0 and stage.effects.accent_count == 0)
+	await pose("Spin",.5)
+	await pose("Guard",0)
+	assert(stage.effects.stroke_count == 0 and stage.effects.accent_count == 0)
+	report["jab_trail_frames"] = active_frames
+	report["jab_accent_frames"] = burst_frames
 	validated = true
 	print("PAM_USER_MODEL_CHECKS_OK ",JSON.stringify(report))
 
@@ -142,41 +179,19 @@ func review() -> void:
 	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	viewport.msaa_3d = Viewport.MSAA_2X
 	root.add_child(viewport)
-	var world := Node3D.new()
-	viewport.add_child(world)
-	var background := WorldEnvironment.new()
-	background.environment = Environment.new()
-	background.environment.background_mode = Environment.BG_COLOR
-	background.environment.background_color = Color("526861")
-	background.environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
-	background.environment.ambient_light_color = Color(.84,.90,1)
-	background.environment.ambient_light_energy = .65
-	background.environment.tonemap_mode = Environment.TONE_MAPPER_LINEAR
-	world.add_child(background)
-	var key := DirectionalLight3D.new()
-	key.rotation_degrees = Vector3(-35,-30,0)
-	key.light_energy = 1.05
-	world.add_child(key)
-	var fill := DirectionalLight3D.new()
-	fill.rotation_degrees = Vector3(-20,150,0)
-	fill.light_energy = .38
-	fill.light_color = Color(.88,.94,1)
-	world.add_child(fill)
-	model = load("res://assets/models/pam_usuario_rig.glb").instantiate()
-	world.add_child(model)
-	discover(model)
+	stage = Stage.new()
+	stage.autoplay = false
+	stage.show_controls = false
+	viewport.add_child(stage)
+	skeleton = stage.skeleton
+	player = stage.player
+	body = stage.body
 	await validate()
 	if not validated:
 		push_error("User model validation failed")
 		quit(2)
 		return
-	var camera := Camera3D.new()
-	world.add_child(camera)
-	camera.projection = Camera3D.PROJECTION_ORTHOGONAL
-	camera.size = 2.1
-	camera.position = Vector3(3.5,1.6,5)
-	camera.look_at(Vector3(0,.77,0))
-	camera.current = true
+	var camera: Camera3D = stage.camera
 	for item in [["Combo",67,"combo"],["Spin",43,"spin"],["Guard",19,"guard"]]:
 		if not await record(item[0],item[1],item[2]):
 			quit(2)

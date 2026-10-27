@@ -6,7 +6,7 @@ O usuário enviou `5d3ee866736f057f78c3c146b673b7a2.glb` em T-pose e pediu a rem
 
 ![Rig do modelo do usuário](captures/pam-usuario-rig.png)
 
-![Combo e giro](captures/pam-usuario-combate.gif)
+![Combo e giro — revisão 2](captures/pam-usuario-cartoon-v2.gif)
 
 ![Joelhos, cotovelo e corrida](captures/pam-usuario-articulacoes.gif)
 
@@ -32,7 +32,19 @@ Os clipes `Guard`, `Jab`, `Cross`, `Kick`, `Combo`, `Spin`, `Run`, `ElbowFlex` e
 
 O rig é FK na execução; o apoio de pés é resolvido e gravado na autoria. Não há dedos individuais nem novas formas faciais. A piscada do estudo anterior não foi transferida à malha do usuário. Em Blender, selecione `PamRig` e escolha uma ação `PamUser_*` no Action Editor para reproduzir os movimentos; a posição de repouso permanece em T.
 
-## Verificação executada
+## Combate cartunesco — revisão 2
+
+Os socos foram refeitos com alvos de punho e polos de cotovelo nas proporções deste modelo. O combo encadeia antecipação, jab, cruzado e chute, com mudanças de peso, recuperação dos braços e dobra do joelho. O giro mantém duas voltas com abertura dos braços, contração inicial e aterrissagem. O comprimento do antebraço chega ao fator autoral 1,135 e a mão a 1,135 no impacto; o giro usa fatores menores. A perna do chute recebe esticamento breve. Esses valores são animação, **sem mudar a malha, os pesos ou o repouso em T-pose**.
+
+A comparação binária com o GLB anterior confirmou identidade de `POSITION`, `NORMAL`, `TEXCOORD_0`, `JOINTS_0` e `WEIGHTS_0`, além das três imagens PBR embutidas. A fonte Blender também verifica uma impressão digital das posições, pesos e matrizes de repouso antes e depois da autoria.
+
+Abra **`scenes/pam_combat_review.tscn` e pressione F6** para ver o modelo e os efeitos no motor. Teclas 1–5 selecionam combo, giro, soco, cruzado e chute; Espaço pausa; setas avançam ou recuam um quadro; V muda a câmera; 0 mostra a T-pose original. Os pequenos rastros e acentos são malhas geradas por `scripts/combat_flourish.gd`, ligados ao tempo e às posições dos punhos/pé. Pausar, reiniciar ou interromper o golpe limpa os efeitos corretamente. Os rastros seguem as direções da T-pose através das matrizes de repouso, sem depender do eixo interno escolhido na importação do esqueleto.
+
+**Os efeitos estão na cena Godot e não dentro do GLB.** Os acentos da revisão são marcadores visuais da coreografia, sem causar dano ou comprovar contato com inimigos. A sincronização com hitboxes do personagem ativo da fase continua pendente.
+
+A revisão foi executada no Godot 4.4.1: 264 capturas reais, poses fracionárias finitas, retorno da escala de todos os membros de ataque à guarda e interrupção do giro sem deformação residual. O maior erro de escala na recuperação foi inferior a 0,000001; a deriva amostrada dos pés de apoio foi 0,00019 unidades. Foram verificados o aparecimento e o término dos efeitos. A cena de revisão também passou no teste de reprodução, pausa, avanço/retorno de quadro, troca de clipe, câmera e retorno à T-pose, com `--fixed-fps 30` e `--fixed-fps 120`; isso verifica a execução e não mede desempenho em GPU. Relatório: `docs/captures/pam-usuario-cartoon-v2-verificacao.json`. [Vídeo MP4](captures/pam-usuario-cartoon-v2.mp4) e [prévia GIF](captures/pam-usuario-cartoon-v2.gif).
+
+## Verificação da vinculação inicial
 
 No **Godot 4.4.1**, foram verificados skin, 22 ossos, nove clipes, material PBR e texturas 4K. A geometria de repouso confirmou a ausência do rabo. Cotovelo direito e ambos os joelhos chegaram a aproximadamente **90°** sem mover o segmento superior no teste isolado. O giro acumulou **720°**. As escalas de impacto foram reproduzidas e a escala do antebraço voltou a 1 na recuperação.
 
@@ -47,14 +59,18 @@ A importação headless retorna código 0, mantendo o diagnóstico interno `Para
 ```sh
 blender -b -t 4 -P tools/user_model/remove_tail.py
 blender -b -t 4 -P tools/user_model/rig.py
+blender -b -t 4 -P tools/user_model/animate.py
 ./tools/godot.sh --headless --editor --import
 PAM_USER_RENDER_ORIGINAL=1 blender -b -t 4 -P tools/user_model/render_tail.py
 blender -b -t 4 -P tools/user_model/render_tail.py
 blender -b -t 4 -P tools/user_model/render_rig.py
 PAM_REVIEW_SCRIPT=tools/user_model/review.gd ./tools/render_review.sh
 python3 tools/user_model/compose.py
+python3 tools/user_model/compose_combat.py
+./tools/godot.sh --headless --fixed-fps 30 --script tests/combat_review.gd
+./tools/godot.sh --headless --fixed-fps 120 --script tests/combat_review.gd
 ```
 
-O `.blend` intermediário da reparação é gerado pelo primeiro comando e não precisa ser distribuído; o original, a fonte final com rig e os GLBs já acompanham o projeto. Ferramentas: Blender 4.3.2, Python/Pillow e Godot 4.4.1. Não há plugin externo para execução.
+O `.blend` intermediário da reparação é gerado pelo primeiro comando e não precisa ser distribuído; o original, a fonte final com rig e os GLBs já acompanham o projeto. Para refinar apenas a animação a partir da fonte distribuída, execute `animate.py`, importe no Godot e repita a revisão; não é preciso refazer a remoção do rabo nem os pesos. O armature oculto de referência permanece intacto, permitindo repetir a geração. Ferramentas: Blender 4.3.2, Python/Pillow, FFmpeg (MP4) e Godot 4.4.1. Não há plugin externo para execução.
 
 O novo modelo está separado do personagem ativo da Fase 1. Adaptar o controlador de animação e sincronizar os contatos/hitboxes com os clipes continua como próximo trabalho de integração. Os testes desta revisão cobrem o asset, importação e animação; não houve novo teste de percurso, de desempenho em GPU ou de conforto de gameplay. Deformações extremas da roupa e qualidade artística ainda podem precisar de ajustes após revisão visual.

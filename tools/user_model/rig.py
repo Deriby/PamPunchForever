@@ -125,90 +125,10 @@ scene = bpy.context.scene
 scene.render.fps = 30
 scene.frame_start, scene.frame_end = 0, 66
 
-# Bone-local twist calibration keeps the front of sleeves/gloves and shoe soles
-# facing correctly when mapping the earlier lowered-arm bind to this T-pose.
-correction = {}
-for name in source.data.bones.keys():
-    world_normal = Vector((0,0,1)) if name.startswith(('foot.','toe.')) else Vector((0,-1,0))
-    a = source.data.bones[name].matrix_local.to_quaternion().inverted() @ world_normal
-    b = rig.data.bones[name].matrix_local.to_quaternion().inverted() @ world_normal
-    a.y, b.y = 0, 0
-    correction[name] = b.normalized().rotation_difference(a.normalized())
-
-def interpolate_matrix(a, b, weight):
-    a, b = a.decompose(), b.decompose()
-    return Matrix.LocRotScale(a[0].lerp(b[0],weight), a[1].slerp(b[1],weight), a[2].lerp(b[2],weight))
-
-def plant(side, goal, weight):
-    if weight < .001:
-        return
-    thigh, shin, foot = ['%s.%s' % (name,side) for name in ['thigh','shin','foot']]
-    fk = {name:rig.pose.bones[name].matrix_basis.copy() for name in [thigh,shin,foot]}
-    foot_rotation, foot_scale = rig.pose.bones[foot].matrix.to_quaternion(), rig.pose.bones[foot].matrix.to_scale()
-    hip = rig.pose.bones[thigh].head.copy()
-    first, second = rig.data.bones[thigh].length, rig.data.bones[shin].length
-    axis = (goal-hip).normalized()
-    distance = max(.01,min(first+second-.0001,(goal-hip).length))
-    forward = Vector((0,-1,0))
-    forward = (forward-axis*forward.dot(axis)).normalized()
-    along = (first*first-second*second+distance*distance)/(2*distance)
-    knee = hip+axis*along+forward*math.sqrt(max(0,first*first-along*along))
-    endpoint = hip+axis*distance
-    for name, head, tail in [(thigh,hip,knee),(shin,knee,endpoint)]:
-        rest = rig.data.bones[name]
-        delta = (rest.tail_local-rest.head_local).rotation_difference(tail-head)
-        rig.pose.bones[name].matrix = Matrix.LocRotScale(head,delta@rest.matrix_local.to_quaternion(),Vector((1,1,1)))
-        bpy.context.view_layer.update()
-    rig.pose.bones[foot].matrix = Matrix.LocRotScale(endpoint,foot_rotation,foot_scale)
-    bpy.context.view_layer.update()
-    if weight < .999:
-        ik = {name:rig.pose.bones[name].matrix_basis.copy() for name in [thigh,shin,foot]}
-        for name in [thigh,shin,foot]:
-            rig.pose.bones[name].matrix_basis = interpolate_matrix(fk[name],ik[name],weight)
-        bpy.context.view_layer.update()
-
-def retarget(clip):
-    for item in rig.pose.bones:
-        src = source.pose.bones[item.name]
-        if item.parent:
-            rest_parent = rig.data.bones[item.parent.name].matrix_local
-            relative_head = rest_parent.inverted() @ item.bone.head_local
-            head = item.parent.matrix @ relative_head
-        else:
-            head = item.bone.head_local+(src.head-source.data.bones[item.name].head_local)
-        item.matrix = Matrix.LocRotScale(head,src.matrix.to_quaternion()@correction[item.name],src.matrix.to_scale())
-        bpy.context.view_layer.update()
-    if clip in ['ElbowFlex','KneeFlex']:
-        return
-    goals, weights = {}, {}
-    for side in ['L','R']:
-        src_foot = source.pose.bones['foot.'+side].head.copy()
-        src_rest = source.data.bones['foot.'+side].head_local
-        goals[side] = src_foot+rig.data.bones['foot.'+side].head_local-src_rest
-        if clip in ['Guard','Jab','Cross','Run'] or (clip in ['Kick','Combo'] and side == 'L'):
-            weight = 1.0
-        else:
-            height = max(0,src_foot.z-src_rest.z)
-            weight = max(0,min(1,1-height/.055))
-            weight = weight*weight*(3-2*weight)
-        weights[side] = weight
-    lower = 0.0
-    for side in ['L','R']:
-        if weights[side] < .999:
-            continue
-        hip = rig.pose.bones['thigh.'+side].head
-        goal = goals[side]
-        reach = rig.data.bones['thigh.'+side].length+rig.data.bones['shin.'+side].length-.004
-        horizontal = (hip.x-goal.x)**2+(hip.y-goal.y)**2
-        vertical = math.sqrt(max(.0001,reach*reach-horizontal))
-        lower = max(lower,hip.z-goal.z-vertical)
-    if lower > 0:
-        matrix = rig.pose.bones['root'].matrix.copy()
-        matrix.translation.z -= lower
-        rig.pose.bones['root'].matrix = matrix
-        bpy.context.view_layer.update()
-    for side in ['L','R']:
-        plant(side,goals[side],weights[side])
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from retarget import Retargeter
+retargeter = Retargeter(source, rig)
 
 rig.animation_data_create()
 for clip_name in names:
@@ -218,7 +138,7 @@ for clip_name in names:
     end = round(source_tracks[clip_name].frame_range[1])
     for frame in range(end+1):
         scene.frame_set(frame)
-        retarget(clip_name)
+        retargeter.retarget(clip_name)
         for item in rig.pose.bones:
             item.rotation_mode = 'QUATERNION'
             item.keyframe_insert(data_path='location',frame=frame,group=item.name)

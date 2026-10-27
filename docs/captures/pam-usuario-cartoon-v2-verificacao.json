@@ -1,0 +1,46 @@
+{
+  "albedo": [
+    4096,
+    4096
+  ],
+  "all_striking_limb_recovery_max_error": 8.45041711272643e-07,
+  "bones": 22,
+  "captures": 264,
+  "clips": [
+    "Combo",
+    "Cross",
+    "ElbowFlex",
+    "Guard",
+    "Jab",
+    "Kick",
+    "KneeFlex",
+    "Run",
+    "Spin"
+  ],
+  "engine": "4.4.1-stable (official)",
+  "impact_forearm_scale": [
+    0.998494803905487,
+    1.0967925786972,
+    0.996428251266479
+  ],
+  "impact_hand_scale": [
+    1.13375389575958,
+    0.999762058258057,
+    1.13645422458649
+  ],
+  "jab_accent_frames": 4,
+  "jab_trail_frames": 9,
+  "joint_angles_degrees": {
+    "elbow_R": 89.999995674289,
+    "knee_L": 89.9997019761547,
+    "knee_R": 89.9996951459655
+  },
+  "resolution": [
+    640,
+    480
+  ],
+  "sampled_support_foot_max_drift": 0.000186199074960314,
+  "spin_degrees": 720.000020035825,
+  "tail_region_rear_extent": -0.290289700031281,
+  "triangles": 49970
+}

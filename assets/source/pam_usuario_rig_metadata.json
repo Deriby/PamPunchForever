@@ -21,5 +21,22 @@
   "bind_pose": "T-pose",
   "facial_morphs_added": false,
   "original_pbr_images_preserved": true,
-  "animation_method": "Retargeted bone orientations with twist calibration and new leg support IK"
+  "animation_method": "Retargeted bone orientations with twist calibration and new leg support IK",
+  "combat_revision": 2,
+  "bind_mesh_weights_rest_sha256": "a548313a0c562b03eedda1b4e66db1cb9346911f6f6e3fdab751d213aa688d8d",
+  "bind_mesh_weights_rest_unchanged": true,
+  "arm_ik": "Baked wrist goals and elbow poles on user proportions",
+  "animation_only_stretch": true,
+  "peak_forearm_length": 1.135,
+  "peak_fist_scale": 1.135,
+  "effects": "Godot CombatFlourish; separate from GLB",
+  "combo_impact_frames": [
+    6,
+    16,
+    30
+  ],
+  "spin_trail_frames": [
+    9,
+    27
+  ]
 }
