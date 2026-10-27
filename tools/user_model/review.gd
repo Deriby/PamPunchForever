@@ -1,6 +1,6 @@
 extends SceneTree
 ## Validate the actual user mesh, tail repair and retargeted clips in Godot 4.4.1.
-const OUTPUT := "/workspace/deliverables/pam_cartoon_v2/"
+const OUTPUT := "/workspace/deliverables/pam_cartoon_v3/"
 const Stage = preload("res://tools/user_model/combat_stage.gd")
 var stage
 var viewport: SubViewport
@@ -47,6 +47,23 @@ func validate() -> void:
 		assert(player.has_animation(clip), "Missing clip "+clip)
 	var arrays := body.mesh.surface_get_arrays(0)
 	assert(arrays[Mesh.ARRAY_INDEX].size()/3 == 49970)
+	var protected := 0
+	for i in range(arrays[Mesh.ARRAY_VERTEX].size()):
+		var point: Vector3 = arrays[Mesh.ARRAY_VERTEX][i]
+		if absf(point.x) < .455*1.538545716 or point.y <= .43*1.538545716 or point.y >= .66*1.538545716:
+			continue
+		var expected := "hand.L" if point.x < 0 else "hand.R"
+		for slot in range(4):
+			var weight: float = arrays[Mesh.ARRAY_WEIGHTS][i*4+slot]
+			if weight <= .00001:
+				continue
+			var bind: int = arrays[Mesh.ARRAY_BONES][i*4+slot]
+			var named := String(body.skin.get_bind_name(bind))
+			assert(named == expected if not named.is_empty() else body.skin.get_bind_bone(bind) == bone(expected),"Hand/thumb must not follow forearm")
+			assert(absf(weight-1) < .00001)
+		protected += 1
+	assert(protected > 1000)
+	report["rigid_hand_vertices_in_imported_mesh"] = protected
 	var rear := 0.0
 	for vertex in arrays[Mesh.ARRAY_VERTEX]:
 		if absf(vertex.x) < .115 and vertex.y > .362 and vertex.y < .514:
@@ -90,6 +107,12 @@ func validate() -> void:
 	assert(fist_scale.x > 1.05 and fist_scale.x < 1.25)
 	report["impact_forearm_scale"] = [arm_scale.x,arm_scale.y,arm_scale.z]
 	report["impact_hand_scale"] = [fist_scale.x,fist_scale.y,fist_scale.z]
+	var fore_length := skeleton.get_bone_global_pose(bone("forearm.R")).origin.distance_to(skeleton.get_bone_global_pose(bone("hand.R")).origin)
+	var rest_length := skeleton.get_bone_global_rest(bone("forearm.R")).origin.distance_to(skeleton.get_bone_global_rest(bone("hand.R")).origin)
+	assert(fore_length/rest_length > 1.23 and fore_length/rest_length < 1.27)
+	report["impact_forearm_length_ratio"] = fore_length/rest_length
+	report["jab_tip_forward"] = stage.effects.tip(skeleton,"hand.R").z
+	assert(report["jab_tip_forward"] > .60)
 	await pose("Jab",19.0/30)
 	assert(skeleton.get_bone_pose_scale(bone("forearm.R")).distance_to(Vector3.ONE) < .003)
 	var max_drift := 0.0
@@ -123,6 +146,8 @@ func validate() -> void:
 	for name in ["upper_arm.R","upper_arm.L","forearm.R","forearm.L","hand.R","hand.L","shin.R","foot.R"]:
 		resting_scales[name] = skeleton.get_bone_global_pose(bone(name)).basis.get_scale()
 	var recovery_error := 0.0
+	var max_hand_skew := 0.0
+	var max_hand_scale_spread := 1.0
 	for clip in ["Jab","Cross","Kick","Combo","Spin"]:
 		await pose(clip,player.get_animation(clip).length)
 		for name: String in resting_scales:
@@ -132,7 +157,16 @@ func validate() -> void:
 			for index in range(skeleton.get_bone_count()):
 				var transform := skeleton.get_bone_global_pose(index)
 				assert(transform.origin.is_finite() and transform.basis.is_finite())
+			for side in ["L","R"]:
+				var hand := bone("hand."+side)
+				var basis := (skeleton.get_bone_global_pose(hand)*skeleton.get_bone_global_rest(hand).affine_inverse()).basis
+				var size := basis.get_scale()
+				max_hand_scale_spread = maxf(max_hand_scale_spread,maxf(size.x,maxf(size.y,size.z))/minf(size.x,minf(size.y,size.z)))
+				max_hand_skew = maxf(max_hand_skew,maxf(absf(basis.x.normalized().dot(basis.y.normalized())),maxf(absf(basis.x.normalized().dot(basis.z.normalized())),absf(basis.y.normalized().dot(basis.z.normalized())))))
 	assert(recovery_error < .005,"Temporary scale must return to guard")
+	assert(max_hand_skew < .04 and max_hand_scale_spread < 1.04,"Fingers must keep their shape through stretch")
+	report["maximum_sampled_hand_skew"] = max_hand_skew
+	report["maximum_sampled_hand_scale_spread"] = max_hand_scale_spread
 	await pose("Spin",.5)
 	await pose("Guard",0)
 	for name: String in resting_scales:
@@ -202,6 +236,18 @@ func review() -> void:
 		if not await record(item[0],item[1],item[2]):
 			quit(2)
 			return
+	for item in [["Guard",0.0,"hand_guard"],["Jab",.2,"hand_impact"]]:
+		await pose(item[0],item[1])
+		stage.effects.visible = false
+		var transform := skeleton.global_transform*skeleton.get_bone_global_pose(bone("hand.R"))
+		var rest := skeleton.get_bone_global_rest(bone("hand.R"))
+		var center := transform*(rest.basis.inverse()*Vector3(.075,0,0))
+		camera.size = .60
+		camera.position = center+Vector3(.65,.48,.8)
+		camera.look_at(center)
+		await RenderingServer.frame_post_draw
+		assert(viewport.get_texture().get_image().save_png(OUTPUT+item[2]+".png") == OK)
+		captures += 1
 	report.merge({"engine":Engine.get_version_info().string,"bones":22,"triangles":49970,
 		"clips":player.get_animation_list(),"captures":captures,"resolution":[640,480],"albedo":[4096,4096]},true)
 	var file := FileAccess.open(OUTPUT+"godot_user_report.json",FileAccess.WRITE)

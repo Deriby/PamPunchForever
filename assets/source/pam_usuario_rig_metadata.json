@@ -22,12 +22,12 @@
   "facial_morphs_added": false,
   "original_pbr_images_preserved": true,
   "animation_method": "Retargeted bone orientations with twist calibration and new leg support IK",
-  "combat_revision": 2,
-  "bind_mesh_weights_rest_sha256": "a548313a0c562b03eedda1b4e66db1cb9346911f6f6e3fdab751d213aa688d8d",
-  "bind_mesh_weights_rest_unchanged": true,
-  "arm_ik": "Baked wrist goals and elbow poles on user proportions",
+  "combat_revision": 3,
+  "bind_mesh_weights_rest_sha256": "df1ac3af853161058d85fc53d1944fc27120a23eb5e8fbe753dc4ee89eda11cc",
+  "bind_mesh_weights_rest_unchanged": false,
+  "arm_ik": "Baked wrist goals and elbow poles on user proportions; stable wrist roll",
   "animation_only_stretch": true,
-  "peak_forearm_length": 1.135,
+  "peak_forearm_length": 1.25,
   "peak_fist_scale": 1.135,
   "effects": "Godot CombatFlourish; separate from GLB",
   "combo_impact_frames": [
@@ -38,5 +38,23 @@
   "spin_trail_frames": [
     9,
     27
-  ]
+  ],
+  "hand_weight_correction": {
+    "changed_vertices": 0,
+    "rigid_hand_vertices": {
+      "L": 618,
+      "R": 791
+    },
+    "full_hand_from_original_abs_x": 0.455,
+    "wrist_blend_original_x": [
+      0.435,
+      0.455
+    ],
+    "geometry_edited": false,
+    "fingers_and_thumb_follow_hand_only": true
+  },
+  "bind_geometry_rest_sha256": "050c1c54c433b7ab8dcb77201cc0d474dc7d2dd860b34dd8c6b9f80ef7055877",
+  "bind_geometry_rest_unchanged": true,
+  "spin_forearm_length": 1.18,
+  "straight_wrist_at_impact": true
 }

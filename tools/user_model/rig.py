@@ -106,6 +106,10 @@ body.select_set(True)
 bpy.context.view_layer.objects.active = body
 bpy.ops.object.vertex_group_limit_total(limit=4)
 bpy.ops.object.vertex_group_normalize_all(lock_active=False)
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from hands import protect_hands
+protect_hands(body, scale)
 for vertex in body.data.vertices:
     assert 1 <= len(vertex.groups) <= 4
     assert abs(sum(g.weight for g in vertex.groups)-1) < .0001
@@ -125,8 +129,6 @@ scene = bpy.context.scene
 scene.render.fps = 30
 scene.frame_start, scene.frame_end = 0, 66
 
-import sys
-sys.path.insert(0, str(Path(__file__).resolve().parent))
 from retarget import Retargeter
 retargeter = Retargeter(source, rig)
 

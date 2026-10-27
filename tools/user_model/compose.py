@@ -5,7 +5,7 @@ from PIL import Image, ImageDraw, ImageFont, ImageChops
 ROOT=Path(__file__).resolve().parents[2]
 OUT=Path('/workspace/deliverables')
 SRC=OUT/'pam_usuario'
-MOTION=OUT/'pam_cartoon_v2'
+MOTION=OUT/'pam_cartoon_v3'
 DOC=ROOT/'docs/captures'
 BOLD='/usr/share/fonts/truetype/dejavu/DejaVuSansCondensed-Bold.ttf'
 REGULAR='/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf'

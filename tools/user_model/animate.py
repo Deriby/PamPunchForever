@@ -1,4 +1,4 @@
-"""Refine combat on the supplied mesh; never edit vertices, weights or bone rest poses.
+"""Refine combat without editing the supplied geometry or bone rest poses.
 
 Run with Blender after rig.py, or on the distributed pam_usuario_rig.blend.
 The hidden original AnimationSource is immutable, making this pass repeatable.
@@ -15,6 +15,7 @@ from mathutils import Matrix, Vector
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from retarget import Retargeter
+from hands import protect_hands
 
 bpy.ops.wm.open_mainfile(filepath=str(ROOT / 'assets/source/pam_usuario_rig.blend'))
 rig, source, body = [bpy.data.objects[n] for n in ['PamRig', 'AnimationSource', 'PamBody']]
@@ -27,18 +28,21 @@ source.hide_viewport = False
 solver = Retargeter(source, rig)
 
 
-def fingerprint():
+def fingerprint(weights=True):
     digest = hashlib.sha256()
     for vertex in body.data.vertices:
         digest.update(struct.pack('<3f', *vertex.co))
-        for group in vertex.groups:
-            digest.update(struct.pack('<If', group.group, group.weight))
+        if weights:
+            for group in vertex.groups:
+                digest.update(struct.pack('<If', group.group, group.weight))
     for bone in rig.data.bones:
         for row in bone.matrix_local:
             digest.update(struct.pack('<4f', *row))
     return digest.hexdigest()
 
 
+geometry_rest_before = fingerprint(weights=False)
+hand_weights = protect_hands(body, 1.5385457161116158)
 unchanged = fingerprint()
 rig.animation_data.action = None
 for track in list(rig.animation_data.nla_tracks):
@@ -48,30 +52,30 @@ for action in list(bpy.data.actions):
         bpy.data.actions.remove(action)
 
 
-def arm(side, wrist, direction, pole=None, stretch=1.0, fist=1.0):
+def arm(side, wrist, direction, pole=None, stretch=1.0, fist=1.0, lead=0.0):
     s = -1 if side == 'L' else 1
     return {'wrist': wrist, 'direction': direction,
             'pole': pole or (s*.68, .06, .58),
-            'upper': 1+(stretch-1)*.30, 'fore': stretch, 'fist': fist}
+            'upper': 1+(stretch-1)*.45, 'fore': stretch, 'fist': fist, 'lead': lead}
 
 
 def guard():
-    return {'L': arm('L', (-.265, -.215, .90), (0, -.28, 1)),
-            'R': arm('R', (.265, -.195, .875), (0, -.28, 1)), 'kick': 0.0}
+    return {'L': arm('L', (-.265, -.215, .90), (.20, -.50, .86), (-.36,-.035,.48)),
+            'R': arm('R', (.265, -.195, .875), (-.20, -.50, .86), (.36,-.035,.48)), 'kick': 0.0}
 
 
 def punch(side, beat):
     p, s = guard(), (-1 if side == 'L' else 1)
     values = {
-        'load': ((s*.30, -.105, .84), (0, -.18, 1), 1.0, .98),
-        'hit': ((s*.155, -.445, .925), (0, -1, .06), 1.135, 1.135),
-        'follow': ((s*.10, -.402, .94), (-s*.22, -1, .09), 1.055, 1.045),
-        'recoil': ((s*.29, -.16, .865), (0, -.18, 1), 1.0, .99),
+        'load': ((s*.30, -.105, .84), (0, -.18, 1), 1.0, .98, -.20),
+        'hit': ((s*.155, -.56, .925), (0, -1, .06), 1.25, 1.135, 1.0),
+        'follow': ((s*.10, -.475, .94), (-s*.22, -1, .09), 1.10, 1.045, .60),
+        'recoil': ((s*.29, -.16, .865), (0, -.18, 1), 1.0, .99, 0.0),
     }
-    wrist, direction, stretch, fist = values[beat]
-    p[side] = arm(side, wrist, direction, stretch=stretch, fist=fist)
+    wrist, direction, stretch, fist, lead = values[beat]
+    p[side] = arm(side, wrist, direction, stretch=stretch, fist=fist, lead=lead)
     other = 'L' if side == 'R' else 'R'
-    p[other] = arm(other, (-s*.235, -.19, .94), (0, -.22, 1))
+    p[other] = arm(other, (-s*.235, -.19, .94), (s*.20, -.50, .86), (-s*.36,-.035,.48))
     return p
 
 
@@ -89,8 +93,8 @@ def spin(beat):
     if beat in ['open', 'turn1', 'turn2']:
         for s, side in [(-1, 'L'), (1, 'R')]:
             wave = .018*s if beat == 'turn1' else -.018*s
-            p[side] = arm(side, (s*.64, -.035, .82+wave), (s, -.12, .08),
-                          (s*.46, .30, .69), stretch=1.105, fist=1.12)
+            p[side] = arm(side, (s*.72, -.035, .82+wave), (s, -.12, .08),
+                          (s*.46, .30, .69), stretch=1.18, fist=1.12)
     elif beat == 'load':
         p['L'] = arm('L', (-.22, -.14, .86), (0, -.2, 1))
         p['R'] = arm('R', (.25, -.12, .82), (0, -.2, 1))
@@ -154,6 +158,14 @@ def solve_arm(side, spec):
     # All goals live in character space, then follow the root through the spin.
     root = rig.pose.bones['root'].matrix @ rig.data.bones['root'].matrix_local.inverted()
     upper, fore, hand = [name+'.'+side for name in ['upper_arm','forearm','hand']]
+    if abs(spec['lead']) > .00001:
+        # Protract the striking shoulder without changing its rest attachment or
+        # stretching the collar bone. This gives the punch real forward reach.
+        clav = 'clavicle.'+side
+        head = rig.pose.bones[clav].head.copy()
+        offset = root.to_quaternion()@Vector((0,-.085*spec['lead'],0))
+        direction = (rig.pose.bones[upper].head-head+offset).normalized()
+        orient(clav,head,head+direction*rig.data.bones[clav].length,(1,1,1))
     shoulder = rig.pose.bones[upper].head.copy()
     goal, pole = [root @ Vector(spec[name]) for name in ['wrist','pole']]
     a = rig.data.bones[upper].length*spec['upper']
@@ -165,10 +177,23 @@ def solve_arm(side, spec):
     along = (a*a-b*b+distance*distance)/(2*distance)
     elbow = shoulder+axis*along+bend*math.sqrt(max(0,a*a-along*along))
     wrist = shoulder+axis*distance
-    orient(upper, shoulder, elbow, (1,spec['upper'],1))
+    # A uniform upper-arm scale prevents a second rotated nonuniform scale from
+    # shearing the forearm, palm and fingers during the baked/exported motion.
+    orient(upper, shoulder, elbow, (spec['upper'],)*3)
     orient(fore, elbow, wrist, (1,spec['fore'],1))
-    direction = root.to_quaternion() @ Vector(spec['direction']).normalized()
-    orient(hand, wrist, wrist+direction*.13, (spec['fist'],)*3)
+    fore_q = rig.pose.bones[fore].matrix.to_quaternion()
+    forward = (fore_q@Vector((0,1,0))).normalized()
+    direction = root.to_quaternion()@Vector(spec['direction']).normalized()
+    # Follow the forearm roll, and straighten the wrist as the sleeve extends.
+    # At impact this makes the inverse length compensation a pure local scale,
+    # leaving the fist uniformly enlarged instead of skewing its small fingers.
+    allowance = math.radians(22)*(1-min(1,max(0,(spec['fore']-1)/.06)))
+    angle = forward.angle(direction)
+    if angle > allowance and angle > .00001:
+        direction = forward.slerp(direction,allowance/angle).normalized()
+    rotation = forward.rotation_difference(direction)@fore_q
+    rig.pose.bones[hand].matrix = Matrix.LocRotScale(wrist,rotation,Vector((spec['fist'],)*3))
+    bpy.context.view_layer.update()
 
 
 for name, original in tracks.items():
@@ -192,12 +217,17 @@ for name, original in tracks.items():
         scene.frame_set(math.floor(source_time), subframe=source_time%1)
         solver.retarget(name)
         if spec:
+            # The root/body positions already provide the crouch and rebound.
+            # Keep the arm ancestors free of inherited anisotropic squash.
+            for ancestor in ['root','hips','spine','chest','neck','head','clavicle.L','clavicle.R']:
+                rig.pose.bones[ancestor].scale = (1,1,1)
+            bpy.context.view_layer.update()
             for side in ['L','R']:
                 solve_arm(side,spec[side])
             if spec['kick'] > 0:
                 # Applied to the striking leg only, after support IK. Never
                 # scale the resting mesh, the planted leg or a bone's rest data.
-                rig.pose.bones['shin.R'].scale.y *= 1+.075*spec['kick']
+                rig.pose.bones['shin.R'].scale.y *= 1+.12*spec['kick']
                 rig.pose.bones['foot.R'].scale *= 1+.055*spec['kick']
                 bpy.context.view_layer.update()
         baked.append({bone.name: bone.matrix_basis.copy() for bone in rig.pose.bones})
@@ -219,7 +249,8 @@ for name, original in tracks.items():
     rig.animation_data.action = None
     print('PAM_USER_CARTOON_BAKED',name,end+1)
 
-assert fingerprint() == unchanged, 'Bind mesh, weights and rest bones must remain identical'
+assert fingerprint() == unchanged, 'No further edits to mesh, corrected weights or rest bones'
+assert fingerprint(weights=False) == geometry_rest_before, 'Original geometry and rest pose must remain identical'
 source.animation_data.action = None
 source.hide_viewport = True
 source.hide_render = True
@@ -237,9 +268,12 @@ bpy.ops.export_scene.gltf(filepath=str(ROOT/'assets/models/pam_usuario_rig.glb')
     export_animations=True,export_animation_mode='NLA_TRACKS',export_frame_range=False)
 meta_path = ROOT/'assets/source/pam_usuario_rig_metadata.json'
 metadata = json.loads(meta_path.read_text())
-metadata.update({'combat_revision':2,'bind_mesh_weights_rest_sha256':unchanged,
-    'bind_mesh_weights_rest_unchanged':True,'arm_ik':'Baked wrist goals and elbow poles on user proportions',
-    'animation_only_stretch':True,'peak_forearm_length':1.135,'peak_fist_scale':1.135,
+metadata.update({'combat_revision':3,'bind_mesh_weights_rest_sha256':unchanged,
+    'bind_mesh_weights_rest_unchanged':False,'hand_weight_correction':hand_weights,
+    'bind_geometry_rest_sha256':geometry_rest_before,'bind_geometry_rest_unchanged':True,
+    'arm_ik':'Baked wrist goals and elbow poles on user proportions; stable wrist roll',
+    'animation_only_stretch':True,'peak_forearm_length':1.25,'peak_fist_scale':1.135,
+    'spin_forearm_length':1.18,'straight_wrist_at_impact':True,
     'effects':'Godot CombatFlourish; separate from GLB',
     'combo_impact_frames':[6,16,30],'spin_trail_frames':[9,27]})
 meta_path.write_text(json.dumps(metadata,indent=2)+'\n')

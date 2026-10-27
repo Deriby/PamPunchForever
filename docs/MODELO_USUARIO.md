@@ -6,7 +6,7 @@ O usuário enviou `5d3ee866736f057f78c3c146b673b7a2.glb` em T-pose e pediu a rem
 
 ![Rig do modelo do usuário](captures/pam-usuario-rig.png)
 
-![Combo e giro — revisão 2](captures/pam-usuario-cartoon-v2.gif)
+![Combo e giro — revisão 3](captures/pam-usuario-cartoon-v3.gif)
 
 ![Joelhos, cotovelo e corrida](captures/pam-usuario-articulacoes.gif)
 
@@ -30,9 +30,21 @@ O rig tem **22 ossos**: raiz, quadril, coluna, peito, pescoço, cabeça; clavíc
 
 Os clipes `Guard`, `Jab`, `Cross`, `Kick`, `Combo`, `Spin`, `Run`, `ElbowFlex` e `KneeFlex` foram adaptados da animação original da revisão 06. A conversão trata a diferença entre a T-pose nova e o repouso de braços baixos do estudo anterior, calibra a rotação das mangas/luvas e recalcula o apoio das pernas conforme os novos comprimentos. O esticamento cartunesco do antebraço/punho permanece no impacto, seguido da recuperação.
 
-O rig é FK na execução; o apoio de pés é resolvido e gravado na autoria. Não há dedos individuais nem novas formas faciais. A piscada do estudo anterior não foi transferida à malha do usuário. Em Blender, selecione `PamRig` e escolha uma ação `PamUser_*` no Action Editor para reproduzir os movimentos; a posição de repouso permanece em T.
+O rig é FK na execução; o apoio de pés é resolvido e gravado na autoria. Não há ossos individuais para os dedos nem novas formas faciais. A piscada do estudo anterior não foi transferida à malha do usuário. Em Blender, selecione `PamRig` e escolha uma ação `PamUser_*` no Action Editor para reproduzir os movimentos; a posição de repouso permanece em T.
 
-## Combate cartunesco — revisão 2
+## Mãos corrigidas e alcance — revisão 3
+
+A passagem do punho tinha pesos de antebraço misturados à mão; o escalonamento herdado também podia deformar a forma dos dedos durante a rotação. Os 1.409 vértices da região de mãos/polegares em Blender agora seguem integralmente o osso da mão, com uma transição estreita no punho. A malha exportada tem 1.960 vértices nessa região, contando as divisões de UV/normal. Não houve alteração da escultura dos dedos, geometria de repouso, normais, UVs, índices, matrizes de vínculo ou imagens PBR; a comparação binária dos dois GLBs confirmou esses invariantes. Os pesos foram corrigidos localmente.
+
+O punho acompanha a orientação do antebraço, com flexão controlada e alinhamento no impacto. A escala herdada foi tratada para evitar cisalhamento da mão. A razão entre os fatores principais de deformação da mão caiu de 1,124 na revisão anterior para 1,022 no pior caso da nova revisão, incluindo amostras entre quadros. Isso preserva melhor a forma dos dedos enquanto a mão aumenta discretamente.
+
+O soco agora combina extensão temporária do braço e avanço do ombro. O comprimento do antebraço chega a 1,25 no impacto, e a mão conserva o aumento discreto de 1,135. A extensão radial do giro também aumentou. Medindo os vértices deformados contra a revisão `e11aebb`: jab **+19,1%** de alcance frontal, cruzado **+18,6%**, giro **+11,1%** de alcance radial e chute **+2,4%**. São medidas da animação do modelo; as hitboxes da fase não foram ampliadas nesta revisão. A geometria e as proporções em T-pose permanecem idênticas, e as escalas recuperam os valores de guarda após o golpe ou interrupção.
+
+[Comparação do alcance](captures/pam-usuario-alcance-v3.png) · [Detalhes das mãos](captures/pam-usuario-maos-v3.png) · [Prévia animada](captures/pam-usuario-cartoon-v3.gif) · [Vídeo](captures/pam-usuario-cartoon-v3.mp4).
+
+Foram gravadas 266 capturas reais no Godot 4.4.1. A revisão verifica os pesos das mãos importadas, extensão do antebraço, estabilidade da forma da mão em tempos fracionários, recuperação da escala, articulações, apoio de pés e término dos efeitos. O relatório está em `docs/captures/pam-usuario-cartoon-v3-verificacao.json`. As medições da malha e das mãos são feitas por `tools/user_model/check_hands.py`; `check_bind.py` compara as duas versões do GLB. A validação da Fase 1 não foi refeita, pois o novo modelo continua na cena de revisão, separado do controlador ativo.
+
+## Combate cartunesco — revisão 2 (histórico)
 
 Os socos foram refeitos com alvos de punho e polos de cotovelo nas proporções deste modelo. O combo encadeia antecipação, jab, cruzado e chute, com mudanças de peso, recuperação dos braços e dobra do joelho. O giro mantém duas voltas com abertura dos braços, contração inicial e aterrissagem. O comprimento do antebraço chega ao fator autoral 1,135 e a mão a 1,135 no impacto; o giro usa fatores menores. A perna do chute recebe esticamento breve. Esses valores são animação, **sem mudar a malha, os pesos ou o repouso em T-pose**.
 
@@ -66,11 +78,14 @@ blender -b -t 4 -P tools/user_model/render_tail.py
 blender -b -t 4 -P tools/user_model/render_rig.py
 PAM_REVIEW_SCRIPT=tools/user_model/review.gd ./tools/render_review.sh
 python3 tools/user_model/compose.py
+blender -b -t 4 -P tools/user_model/check_hands.py
 python3 tools/user_model/compose_combat.py
 ./tools/godot.sh --headless --fixed-fps 30 --script tests/combat_review.gd
 ./tools/godot.sh --headless --fixed-fps 120 --script tests/combat_review.gd
 ```
 
-O `.blend` intermediário da reparação é gerado pelo primeiro comando e não precisa ser distribuído; o original, a fonte final com rig e os GLBs já acompanham o projeto. Para refinar apenas a animação a partir da fonte distribuída, execute `animate.py`, importe no Godot e repita a revisão; não é preciso refazer a remoção do rabo nem os pesos. O armature oculto de referência permanece intacto, permitindo repetir a geração. Ferramentas: Blender 4.3.2, Python/Pillow, FFmpeg (MP4) e Godot 4.4.1. Não há plugin externo para execução.
+O `.blend` intermediário da reparação é gerado pelo primeiro comando e não precisa ser distribuído; o original, a fonte final com rig e os GLBs já acompanham o projeto. Para comparar a geometria antes/depois, copie o GLB antes de gerar a animação e execute `python3 tools/user_model/check_bind.py ANTES.glb DEPOIS.glb`. Para medir a diferença de alcance, grave primeiro a medição antiga com `PAM_HAND_CAPTURE_BASELINE=1 PAM_HAND_REPORT=/tmp/maos-antes.json blender -b -t 4 -P tools/user_model/check_hands.py`; após gerar a nova animação, use `PAM_HAND_BASELINE=/tmp/maos-antes.json blender -b -t 4 -P tools/user_model/check_hands.py`.
+
+Para refinar apenas a animação a partir da fonte distribuída, execute `animate.py`, importe no Godot e repita a revisão; não é preciso refazer a remoção do rabo nem os pesos. O armature oculto de referência permanece intacto, permitindo repetir a geração. Ferramentas: Blender 4.3.2, Python/Pillow, FFmpeg (MP4) e Godot 4.4.1. Não há plugin externo para execução.
 
 O novo modelo está separado do personagem ativo da Fase 1. Adaptar o controlador de animação e sincronizar os contatos/hitboxes com os clipes continua como próximo trabalho de integração. Os testes desta revisão cobrem o asset, importação e animação; não houve novo teste de percurso, de desempenho em GPU ou de conforto de gameplay. Deformações extremas da roupa e qualidade artística ainda podem precisar de ajustes após revisão visual.

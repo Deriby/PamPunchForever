@@ -4,7 +4,7 @@
 
 A base visual do Pam agora é o **modelo fornecido pelo usuário**. A [edição do modelo](docs/MODELO_USUARIO.md) remove o rabinho, preserva as texturas e acrescenta rig de 22 ossos, combo cartunesco, giro e articulações das pernas. Há um GLB em T-pose na escala original e outro com rig/animações. O personagem ativo da fase ainda é o anterior; esses arquivos estão separados para revisão do novo modelo.
 
-A revisão dos golpes tem uma cena própria: abra **`scenes/pam_combat_review.tscn` e pressione F6** para ver combo, chute e giro com esticamento temporário e efeitos. [Prévia animada](docs/captures/pam-usuario-cartoon-v2.gif) · [Vídeo](docs/captures/pam-usuario-cartoon-v2.mp4).
+A revisão dos golpes tem uma cena própria: abra **`scenes/pam_combat_review.tscn` e pressione F6** para ver combo, chute e giro com esticamento temporário e efeitos. [Prévia animada](docs/captures/pam-usuario-cartoon-v3.gif) · [Vídeo](docs/captures/pam-usuario-cartoon-v3.mp4).
 
 Uma primeira fase compacta, do prólogo ao antigo porto. Pam perde Jaburanga no confronto de abertura, enfrenta brevemente o assassino e inicia a jornada. A trilha ensina movimento, caixas e combate antes de introduzir ponte, raízes inclinadas, altar de checkpoint, balsa móvel, desvio secreto, fenda e arena de saída. A arena só abre após a derrota dos dois guardiões.
 

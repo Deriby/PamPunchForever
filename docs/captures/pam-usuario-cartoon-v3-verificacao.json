@@ -1,0 +1,91 @@
+{
+  "albedo": [
+    4096,
+    4096
+  ],
+  "all_striking_limb_recovery_max_error": 3.99840104137184e-07,
+  "bones": 22,
+  "captures": 266,
+  "clips": [
+    "Combo",
+    "Cross",
+    "ElbowFlex",
+    "Guard",
+    "Jab",
+    "Kick",
+    "KneeFlex",
+    "Run",
+    "Spin"
+  ],
+  "engine": "4.4.1-stable (official)",
+  "impact_forearm_length_ratio": 1.2500004193869,
+  "impact_forearm_scale": [
+    0.898876428604126,
+    1.1235955953598,
+    0.898876547813416
+  ],
+  "impact_hand_scale": [
+    1.13499975204468,
+    0.907999694347382,
+    1.13500010967255
+  ],
+  "jab_accent_frames": 4,
+  "jab_tip_forward": 0.671945035457611,
+  "jab_trail_frames": 9,
+  "joint_angles_degrees": {
+    "elbow_R": 89.999995674289,
+    "knee_L": 89.9997019761547,
+    "knee_R": 89.9996951459655
+  },
+  "maximum_sampled_hand_scale_spread": 1.00155097136143,
+  "maximum_sampled_hand_skew": 0.0110344290733337,
+  "resolution": [
+    640,
+    480
+  ],
+  "rigid_hand_vertices_in_imported_mesh": 1960,
+  "sampled_support_foot_max_drift": 0.000186166624189354,
+  "spin_degrees": 720.000020035825,
+  "tail_region_rear_extent": -0.290289700031281,
+  "triangles": 49970,
+  "hand_skinning_and_reach": {
+    "hand_vertices": {
+      "L": 618,
+      "R": 791
+    },
+    "hand_vertices_mixed_with_forearm": {
+      "L": 0,
+      "R": 0
+    },
+    "maximum_hand_anisotropy": 1.0215475781226435,
+    "worst_pose": [
+      "Combo",
+      4.5,
+      "R"
+    ],
+    "reach": {
+      "Jab": {
+        "forward_mesh_reach": 0.6453723907470703,
+        "radial_mesh_reach": 0.6908915103285836
+      },
+      "Cross": {
+        "forward_mesh_reach": 0.6582760214805603,
+        "radial_mesh_reach": 0.7012468996036011
+      },
+      "Kick": {
+        "forward_mesh_reach": 0.5053299069404602,
+        "radial_mesh_reach": 0.5225365318558386
+      },
+      "Spin": {
+        "forward_mesh_reach": 0.6557629108428955,
+        "radial_mesh_reach": 0.9024967654906673
+      }
+    },
+    "reach_increase_percent": {
+      "Jab": 19.14181334344489,
+      "Cross": 18.581152105666977,
+      "Kick": 2.3664400538055963,
+      "Spin": 11.13422384862277
+    }
+  }
+}
