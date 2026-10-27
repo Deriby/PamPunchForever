@@ -1,5 +1,7 @@
 # Pam — animação cartunesca, revisão 06
 
+**Continuação:** os movimentos desta revisão foram adaptados ao [modelo fornecido pelo usuário](MODELO_USUARIO.md), que substitui este estudo como referência visual do Pam.
+
 O pedido desta revisão é dar mais vida ao combate: braço e punho estendem brevemente no impacto, o corpo prepara e acompanha os golpes, e joelhos/tornozelos participam da base, corrida, chute e aterrissagem.
 
 ![Combo e giro no Godot](captures/pam-cartoon-06-combate.gif)

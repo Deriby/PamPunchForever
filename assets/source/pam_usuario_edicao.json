@@ -1,0 +1,12 @@
+{
+  "original_sha256": "293e2e7f4ed41c0280ef04bdcc710dca75407fcf6e72a4f9b1f9fb3bd1f469b2",
+  "original_faces": 50004,
+  "tail_faces_removed": 1006,
+  "repair_faces": 972,
+  "result_triangles": 49970,
+  "boundary_edges": 0,
+  "manifold": true,
+  "upper_body_positions_preserved": true,
+  "original_pbr_images_preserved": true,
+  "repair": "Localized rear closure with existing fabric UV samples"
+}

@@ -1,0 +1,25 @@
+{
+  "base": "User-supplied GLB, tail removed",
+  "normalized_height": 1.6,
+  "uniform_scale": 1.5385457161116158,
+  "bones": 22,
+  "triangles": 49970,
+  "clips": [
+    "Guard",
+    "Jab",
+    "Cross",
+    "Kick",
+    "Combo",
+    "Spin",
+    "Run",
+    "ElbowFlex",
+    "KneeFlex"
+  ],
+  "max_weight_influences": 4,
+  "automatic_heat_unweighted_repaired": 0,
+  "weight_checks": "All vertices normalized; sculpted face and glove/shoe regions protected",
+  "bind_pose": "T-pose",
+  "facial_morphs_added": false,
+  "original_pbr_images_preserved": true,
+  "animation_method": "Retargeted bone orientations with twist calibration and new leg support IK"
+}

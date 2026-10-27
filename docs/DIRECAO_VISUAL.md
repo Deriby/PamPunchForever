@@ -1,6 +1,6 @@
 # Direção visual — histórico e nova referência PS1
 
-**Diretriz atual:** o usuário revogou a aprovação anterior dos personagens e escolheu os modelos de **Crash 1 como referência de estilo técnico do PS1**. A [revisão 06 do Pam](CARTOON_PAM.md) trabalha animação cartunesca: combo, giro, esticamento breve de braço/punho, antecipação, recuperação e pernas articuladas. Continua a malha/rig próprios da revisão 05, com uma ligação de pescoço adicional. Está em avaliação; não é uma reconstrução de um modelo comercial.
+**Diretriz atual:** o usuário substituiu os estudos anteriores pelo seu próprio GLB em T-pose. O [modelo do usuário](MODELO_USUARIO.md) é a base visual prioritária do Pam. A edição remove o rabinho e adapta o rig e os movimentos cartunescos às suas proporções. As texturas fornecidas e a forma da cabeça/corpo foram preservadas fora da reparação localizada. A construção/animação PS1 continua como referência de linguagem; este modelo não é uma recuperação de dados comerciais.
 
 O restante deste documento registra a revisão anterior. O **Pam, estudo 03**, visível em `docs/captures/pam-modelo-v3.png`, chegou a ser aprovado, mas essa aprovação foi retirada. O GLB dessa revisão permanece no jogo enquanto o novo estudo é avaliado. `assets/source/approved_pam.sha256` conserva apenas sua identificação histórica, sem representar aprovação vigente.
 

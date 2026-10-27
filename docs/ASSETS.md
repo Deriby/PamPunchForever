@@ -38,5 +38,7 @@ Malhas e texturas originais geradas localmente. Contagens obtidas diretamente do
 | pam_ps1_estudo | 715 | 65184 | Revisão 04, pivôs rígidos históricos |
 | pam_ps1_rig | 1099 | 152712 | Revisão 05: 22 ossos, skin e 5 clipes |
 | pam_ps1_cartoon | 1131 | 295976 | Revisão 06: 22 ossos, 9 clipes e piscada, em avaliação |
+| pam_usuario_sem_rabo | 49970 | 27833748 | Modelo do usuário: T-pose, reparação localizada |
+| pam_usuario_rig | 49970 | 28790812 | Modelo do usuário: 22 ossos, 9 clipes |
 
-Detalhes, capturas e verificações em [CARTOON_PAM.md](CARTOON_PAM.md); histórico do rig em [RIG_PAM.md](RIG_PAM.md).
+A base atual é o [modelo fornecido pelo usuário](MODELO_USUARIO.md). Os estudos anteriores permanecem no histórico: [CARTOON_PAM.md](CARTOON_PAM.md) e [RIG_PAM.md](RIG_PAM.md).

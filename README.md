@@ -2,7 +2,7 @@
 
 **A Trilha da Vingança** · Godot **4.4 / 4.4.1 stable** · GDScript · plataforma 3D e combate original.
 
-A direção dos personagens está em revisão: o usuário retirou a aprovação anterior e escolheu o estilo técnico dos modelos de **Crash 1 / PS1**. O [Pam cartunesco, revisão 06](docs/CARTOON_PAM.md), tem combo de soco/cruzado/chute, giro, esticamento breve de braço/punho, joelhos e tornozelos articulados. São nove clipes sobre um rig de 22 ossos, com 1.131 triângulos e atlas de 128×128. O jogo ainda usa os modelos da revisão anterior; os novos clipes estão separados para avaliação visual.
+A base visual do Pam agora é o **modelo fornecido pelo usuário**. A [edição do modelo](docs/MODELO_USUARIO.md) remove o rabinho, preserva as texturas e acrescenta rig de 22 ossos, combo cartunesco, giro e articulações das pernas. Há um GLB em T-pose na escala original e outro com rig/animações. O personagem ativo da fase ainda é o anterior; esses arquivos estão separados para revisão do novo modelo.
 
 Uma primeira fase compacta, do prólogo ao antigo porto. Pam perde Jaburanga no confronto de abertura, enfrenta brevemente o assassino e inicia a jornada. A trilha ensina movimento, caixas e combate antes de introduzir ponte, raízes inclinadas, altar de checkpoint, balsa móvel, desvio secreto, fenda e arena de saída. A arena só abre após a derrota dos dois guardiões.
 
