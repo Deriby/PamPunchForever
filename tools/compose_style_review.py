@@ -16,7 +16,7 @@ def title(board,label,sub):
  text(board,110,53,'PAM',96);text(board,115,157,'PUNCH FOREVER',24,red)
  text(board,w-850,83,label,26);text(board,w-850,126,sub,20,muted)
  d.line((106,220,w-106,220),fill='#c3b59f',width=2)
-board=canvas(2800,1450);title(board,'ELENCO DA FASE 1','Modelos 3D • direção visual baseada no Pam aprovado')
+board=canvas(2800,1450);title(board,'ELENCO DA FASE 1','Modelos 3D • registro da direção visual anterior')
 for key,x,height,label,role in [('jaburanga',470,920,'JABURANGA','Mestre'),('assassin',1190,940,'ASSASSINO','Identidade oculta'),('guardian',1820,820,'GUARDIÃO DO JATOBÁ','Guardião das ruínas'),('guardian_scout',2410,820,'SENTINELA DO IGARAPÉ','Guardião das ruínas')]:
  im=Image.open(SRC/(key+'.png')).convert('RGBA');im=im.crop(im.getchannel('A').getbbox());im=im.resize((round(im.width*height/im.height),height),Image.Resampling.LANCZOS)
  baseline=1250;sh=Image.new('RGBA',board.size);sd=ImageDraw.Draw(sh);sd.ellipse((x-im.width*.28,baseline-9,x+im.width*.28,baseline+11),fill=(50,40,33,25));board.alpha_composite(sh.filter(ImageFilter.GaussianBlur(15)))

@@ -47,7 +47,8 @@ def save(name):
  bpy.ops.export_scene.gltf(filepath=ROOT+'/assets/models/'+name+'.glb',export_format='GLB',export_yup=True,export_animations=False)
  bpy.ops.object.delete(use_global=False)
 # Concept-led Pam generator is shared with the actual-model preview.
-# The approved Pam is retained unless rebuilding it is explicitly requested.
+# Keep the previous in-game Pam by default. Its earlier approval was revoked;
+# the new PS1 study is generated separately by tools/ps1/model.py.
 if os.environ.get('PAM_REBUILD_APPROVED_PAM')=='1':
  exec(compile(open(os.path.join(os.path.dirname(__file__), 'build_pam.py')).read(), 'build_pam.py', 'exec'), globals())
  save('pam')

@@ -1,0 +1,20 @@
+{
+	"bones": 22,
+	"captures": 68,
+	"clips": [
+		"Cross",
+		"ElbowFlex",
+		"Guard",
+		"Jab",
+		"Run"
+	],
+	"elbow_angle_degrees": 90.0000229950457,
+	"engine": "4.4.1-stable (official)",
+	"resolution": [
+		640,
+		480
+	],
+	"skins": 1,
+	"stationary_upper_arm": true,
+	"wrist_travel": 0.290795564651489
+}

@@ -30,3 +30,12 @@ Malhas e texturas originais geradas localmente. Contagens obtidas diretamente do
 | tree0 | 1672 | 334532 |
 | tree1 | 1672 | 334528 |
 | tree2 | 540 | 225696 |
+
+## Estudos separados da fase
+
+| Asset | Triângulos | Bytes | Estado |
+|---|---:|---:|---|
+| pam_ps1_estudo | 715 | 65184 | Revisão 04, pivôs rígidos históricos |
+| pam_ps1_rig | 1099 | 152712 | Revisão 05: 22 ossos, skin e 5 clipes, em avaliação |
+
+Detalhes, capturas e verificações em [RIG_PAM.md](RIG_PAM.md).

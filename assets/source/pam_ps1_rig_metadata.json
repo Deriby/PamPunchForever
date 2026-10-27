@@ -1,0 +1,21 @@
+{
+  "revision": 5,
+  "triangles": 1099,
+  "bones": 22,
+  "skins": 1,
+  "materials": 1,
+  "atlas": [
+    128,
+    128
+  ],
+  "max_vertex_influences": 2,
+  "animations": [
+    "Guard",
+    "Jab",
+    "Cross",
+    "ElbowFlex",
+    "Run"
+  ],
+  "elbow_flex_test_hand_travel": 0.3741,
+  "commercial_models_used": false
+}

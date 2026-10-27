@@ -1,8 +1,10 @@
-# Direção visual — referência aprovada e aplicação à Fase 1
+# Direção visual — histórico e nova referência PS1
 
-O usuário aprovou o **Pam, estudo 03**, visível em `docs/captures/pam-modelo-v3.png`. Este é o padrão da família visual. O GLB aprovado foi preservado byte a byte durante esta revisão; seu SHA-256 está em `assets/source/approved_pam.sha256`. A aprovação do Pam não é aprovação automática dos demais modelos.
+**Diretriz atual:** o usuário revogou a aprovação anterior dos personagens e escolheu os modelos de **Crash 1 como referência de estilo técnico do PS1**. O novo Pam original está em [RIG_PAM.md](RIG_PAM.md), com malha própria, atlas pequeno, esqueleto e pesos. A revisão 05 acrescenta os cotovelos e punhos que faltavam na revisão 04. Está em revisão; não é uma reconstrução de um modelo comercial.
 
-A revisão usa volumes facetados desenhados, pintura integrada ao rosto, silhuetas reconhecíveis, couro/tecido foscos, cores quentes nas roupas e verdes naturais no ambiente. O rosto do Pam e suas proporções não foram refeitos. Não se trata de recuperar ou copiar modelos de jogos comerciais.
+O restante deste documento registra a revisão anterior. O **Pam, estudo 03**, visível em `docs/captures/pam-modelo-v3.png`, chegou a ser aprovado, mas essa aprovação foi retirada. O GLB dessa revisão permanece no jogo enquanto o novo estudo é avaliado. `assets/source/approved_pam.sha256` conserva apenas sua identificação histórica, sem representar aprovação vigente.
+
+A revisão anterior usou volumes facetados desenhados, pintura integrada ao rosto, silhuetas reconhecíveis, couro/tecido foscos, cores quentes nas roupas e verdes naturais no ambiente. Naquela etapa o rosto do Pam e suas proporções foram preservados. Não foram usados modelos de jogos comerciais.
 
 ## Elenco presente na fase
 
@@ -37,6 +39,6 @@ blender -b -t 4 -P tools/preview_cast.py
 python3 tools/compose_style_review.py
 ```
 
-A reprodução das imagens usa Python, Pillow e NumPy; a geração de malhas usa Blender 4.3.2. Esses pacotes são ferramentas de autoria opcionais: os GLB e PNG já estão incluídos e o jogo só precisa do Godot 4.4.1. `tools/build_art.py` também mantém o Pam aprovado por padrão. Só use `PAM_REBUILD_APPROVED_PAM=1` se uma tarefa autorizar a alteração do Pam.
+A reprodução das imagens usa Python, Pillow e NumPy; a geração de malhas usa Blender 4.3.2. Esses pacotes são ferramentas de autoria opcionais: os GLB e PNG já estão incluídos e o jogo só precisa do Godot 4.4.1. `tools/build_art.py` mantém o modelo anterior por padrão. A opção legada `PAM_REBUILD_APPROVED_PAM=1` regenera essa versão anterior; o novo estudo tem geradores independentes em `tools/ps1/`.
 
 O próximo acabamento é avaliar artisticamente estes novos modelos com o usuário, pintar variações adicionais e substituir animações procedurais por clipes com antecipação, impacto e recuperação dirigidos. Não houve regravação de áudio, dublagem, nova campanha ou redesenho da IA nesta revisão.
