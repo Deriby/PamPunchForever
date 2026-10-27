@@ -1,6 +1,6 @@
 # Estado da direção de arte
 
-**Direção atual:** a aprovação do Pam do estudo 03 foi retirada. O usuário escolheu os modelos de Crash 1 como referência de estilo técnico do PS1. O novo [Pam com rig, revisão 05](RIG_PAM.md), corrige a ausência de cotovelos do estudo 04, com esqueleto de 22 ossos, skin e cinco clipes. Está em revisão, sem aprovação artística vigente. O jogo ainda usa a versão anterior enquanto esse estudo é avaliado.
+**Direção atual:** a aprovação do Pam do estudo 03 foi retirada. O usuário escolheu os modelos de Crash 1 como referência de estilo técnico do PS1. O novo [Pam cartunesco, revisão 06](CARTOON_PAM.md), usa o rig de 22 ossos com combo, giro, esticamento breve no impacto e animação de joelhos/tornozelos. Está em avaliação visual. O jogo ainda usa a versão anterior enquanto esse estudo é avaliado.
 
 **Aplicado nesta revisão, sujeito à avaliação artística:** Jaburanga, assassino, duas variações de guardião, árvores, vegetação baixa e alta, rochas, raízes, terra/musgo, ruínas, portão, ponte, balsa, caixas, explosivos, altar e colecionáveis. Todos estão integrados à cena e possuem materiais próprios. As folhas de Jaburanga continuam a referência prioritária; o assassino e os guardiões são desenhos originais de desenvolvimento.
 

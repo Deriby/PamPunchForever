@@ -1,0 +1,37 @@
+{
+	"blink_exported_and_played": true,
+	"bones": 22,
+	"captures": 245,
+	"clips": [
+		"Combo",
+		"Cross",
+		"ElbowFlex",
+		"Guard",
+		"Jab",
+		"Kick",
+		"KneeFlex",
+		"Run",
+		"Spin"
+	],
+	"engine": "4.4.1-stable (official)",
+	"impact_fist_scale": [
+		1.12000000476837,
+		1.06000006198883,
+		1.09999978542328
+	],
+	"impact_forearm_scale": [
+		0.999999940395355,
+		1.09499990940094,
+		0.99999988079071
+	],
+	"knees_degrees": {
+		"L": 89.9999820139107,
+		"R": 89.9999820139107
+	},
+	"resolution": [
+		640,
+		480
+	],
+	"spin_degrees": 720.000020035824,
+	"support_foot_max_drift": 0.000209221369004808
+}

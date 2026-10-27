@@ -1,5 +1,7 @@
 # Pam — rig da revisão 05
 
+**Continuação:** a [revisão 06](CARTOON_PAM.md) acrescenta combate cartunesco, combo, giro, esticamento no impacto e animações detalhadas das pernas. Esta página conserva o estado e as verificações da revisão 05.
+
 A revisão 04 tinha partes girando pelos ombros/quadris, sem cotovelos. A correção substitui esse sistema por **um esqueleto de 22 ossos e uma malha com pesos**. A cabeça e a identidade visual do estudo PS1 foram mantidas; braços e pernas foram reconstruídos para articular.
 
 ![Dobra e soco no Godot](captures/pam-rig-05-movimento.gif)

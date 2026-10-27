@@ -36,6 +36,7 @@ Malhas e texturas originais geradas localmente. Contagens obtidas diretamente do
 | Asset | Triângulos | Bytes | Estado |
 |---|---:|---:|---|
 | pam_ps1_estudo | 715 | 65184 | Revisão 04, pivôs rígidos históricos |
-| pam_ps1_rig | 1099 | 152712 | Revisão 05: 22 ossos, skin e 5 clipes, em avaliação |
+| pam_ps1_rig | 1099 | 152712 | Revisão 05: 22 ossos, skin e 5 clipes |
+| pam_ps1_cartoon | 1131 | 295976 | Revisão 06: 22 ossos, 9 clipes e piscada, em avaliação |
 
-Detalhes, capturas e verificações em [RIG_PAM.md](RIG_PAM.md).
+Detalhes, capturas e verificações em [CARTOON_PAM.md](CARTOON_PAM.md); histórico do rig em [RIG_PAM.md](RIG_PAM.md).

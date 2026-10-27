@@ -1,6 +1,6 @@
 # Direção visual — histórico e nova referência PS1
 
-**Diretriz atual:** o usuário revogou a aprovação anterior dos personagens e escolheu os modelos de **Crash 1 como referência de estilo técnico do PS1**. O novo Pam original está em [RIG_PAM.md](RIG_PAM.md), com malha própria, atlas pequeno, esqueleto e pesos. A revisão 05 acrescenta os cotovelos e punhos que faltavam na revisão 04. Está em revisão; não é uma reconstrução de um modelo comercial.
+**Diretriz atual:** o usuário revogou a aprovação anterior dos personagens e escolheu os modelos de **Crash 1 como referência de estilo técnico do PS1**. A [revisão 06 do Pam](CARTOON_PAM.md) trabalha animação cartunesca: combo, giro, esticamento breve de braço/punho, antecipação, recuperação e pernas articuladas. Continua a malha/rig próprios da revisão 05, com uma ligação de pescoço adicional. Está em avaliação; não é uma reconstrução de um modelo comercial.
 
 O restante deste documento registra a revisão anterior. O **Pam, estudo 03**, visível em `docs/captures/pam-modelo-v3.png`, chegou a ser aprovado, mas essa aprovação foi retirada. O GLB dessa revisão permanece no jogo enquanto o novo estudo é avaliado. `assets/source/approved_pam.sha256` conserva apenas sua identificação histórica, sem representar aprovação vigente.
 
