@@ -64,7 +64,7 @@ func _ready() -> void:
 		layer.add_child(caption)
 		var help := Label.new()
 		help.position = Vector2(25,58)
-		help.text = "1 Combo   2 Giro   3 Soco   4 Cruzado   5 Chute   0 T-pose\nEspaço: pausar   ← →: quadro   V: frente / lado"
+		help.text = "Revisão: 1 Combo   2 Giro   3 Médio   4 Forte   5 Pulo   0 T-pose\nEspaço: pausar   ← →: quadro   V: frente / lado"
 		help.add_theme_font_size_override("font_size",16)
 		layer.add_child(help)
 	sample("Combo",0)
@@ -78,7 +78,7 @@ func sample(name: String, time: float) -> void:
 	skeleton.force_update_all_bone_transforms()
 	effects.sample(skeleton,clip,time)
 	if caption:
-		caption.text = "PAM · "+{"Combo":"Combo", "Spin":"Giro", "Jab":"Soco", "Cross":"Cruzado", "Kick":"Chute"}.get(clip,clip)
+		caption.text = "PAM · "+{"Combo":"Giro → médio → forte", "Spin":"Giro", "Medium":"Soco médio", "Strong":"Soco forte", "Jump":"Pulo"}.get(clip,clip)
 
 func _process(delta: float) -> void:
 	if not autoplay or paused:
@@ -94,7 +94,7 @@ func _process(delta: float) -> void:
 func _unhandled_key_input(event: InputEvent) -> void:
 	if not event is InputEventKey or not event.pressed or event.echo:
 		return
-	var keys := {KEY_1:"Combo",KEY_2:"Spin",KEY_3:"Jab",KEY_4:"Cross",KEY_5:"Kick"}
+	var keys := {KEY_1:"Combo",KEY_2:"Spin",KEY_3:"Medium",KEY_4:"Strong",KEY_5:"Jump"}
 	if keys.has(event.keycode):
 		paused = false
 		sample(keys[event.keycode],0)

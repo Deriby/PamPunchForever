@@ -18,4 +18,4 @@ if [ -z "${DISPLAY:-}" ]; then
  done
 fi
 export LP_NUM_THREADS="${LP_NUM_THREADS:-4}"
-"$PAM_ROOT/tools/godot.sh" --audio-driver Dummy --script "${PAM_REVIEW_SCRIPT:-tests/capture.gd}"
+"$PAM_ROOT/tools/godot.sh" --audio-driver Dummy --script "${PAM_REVIEW_SCRIPT:-tests/capture.gd}" "$@"

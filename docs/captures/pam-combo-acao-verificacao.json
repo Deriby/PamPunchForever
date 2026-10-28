@@ -1,0 +1,65 @@
+{
+  "action_order": [
+    "spin",
+    "medium",
+    "strong"
+  ],
+  "action_presses": 3,
+  "actual_input": true,
+  "captures": 120,
+  "engine": "4.4.1-stable (official)",
+  "fixed_render_fps": 30,
+  "jump_action_order": [
+    "spin"
+  ],
+  "jump_presses": 1,
+  "physics_ticks": 120,
+  "resolution": [
+    640,
+    480
+  ],
+  "scene": "scenes/trail.tscn",
+  "staged_camera": true,
+  "hand_and_reach_check": {
+    "hand_vertices": {
+      "L": 618,
+      "R": 791
+    },
+    "hand_vertices_mixed_with_forearm": {
+      "L": 0,
+      "R": 0
+    },
+    "maximum_hand_anisotropy": 1.0243565252349323,
+    "worst_pose": [
+      "Combo",
+      1.5,
+      "R"
+    ],
+    "reach": {
+      "Jab": {
+        "forward_mesh_reach": 0.6453723907470703,
+        "radial_mesh_reach": 0.6908915103285836
+      },
+      "Cross": {
+        "forward_mesh_reach": 0.6582760214805603,
+        "radial_mesh_reach": 0.7012468996036011
+      },
+      "Kick": {
+        "forward_mesh_reach": 0.5053299069404602,
+        "radial_mesh_reach": 0.5225365318558386
+      },
+      "Spin": {
+        "forward_mesh_reach": 0.6557629108428955,
+        "radial_mesh_reach": 0.9024967654906673
+      },
+      "Medium": {
+        "forward_mesh_reach": 0.5613114833831787,
+        "radial_mesh_reach": 0.610597723156765
+      },
+      "Strong": {
+        "forward_mesh_reach": 0.7090882658958435,
+        "radial_mesh_reach": 0.7533921264284253
+      }
+    }
+  }
+}

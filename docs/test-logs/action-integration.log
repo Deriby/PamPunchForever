@@ -1,0 +1,36 @@
+Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org
+
+PASS arrow and debug physical key mappings
+PASS one action and jump replace separate attack/dodge mappings
+PASS title and native scene load
+PASS opening presents both fighters
+PASS opening includes controllable confrontation
+PASS forced defeat holds a knocked-down pose
+PASS forced defeat transitions into the trail
+PASS spawn resolves onto floor
+PASS acceleration produces actual displacement
+PASS braking reaches rest
+PASS full jump rises and lands on collision floor
+PASS button release shortens jump
+PASS ceiling stops upward motion
+PASS swept world collision blocks wall
+PASS incline collision lifts and grounds moving player
+PASS active hitbox strikes an actual enemy hurtbox once
+PASS enemy reacts with knockback and stun
+PASS single swing deduplicates repeated overlaps
+PASS buffered second input chains spin to medium
+PASS third input chains medium to strong
+PASS physical spin breaks crate and releases pickup
+PASS attack outside hurtbox leaves enemy health unchanged
+PASS live enemy AI telegraphs, attacks, and damages player
+PASS the same action button starts spin in the air
+PASS checkpoint proximity heals and saves location
+PASS fall death returns to saved checkpoint
+PASS moving platform transports a grounded passenger
+PASS secret branch collectible records mentor memory
+PASS arena entry spawns both required guardians
+PASS defeating arena guardians opens physical gate
+PASS exit reaches authored level conclusion
+PASS TNT arms a three-second countdown
+PASS TNT countdown ends in explosion and cleanup
+RESULT 33/33 passed

@@ -21,7 +21,7 @@ func settle_at(pos: Vector3) -> void:
  p.global_position = pos
  p.velocity = Vector3.ZERO
  p.test_motion = Vector2.ZERO
- p.attack = ""
+ p.cancel_combo()
  p.stun = 0
  p.controllable = true
  await ticks(12)
@@ -32,6 +32,7 @@ func run() -> void:
  p = game.player
  check(InputMap.action_get_events("move_left")[1].physical_keycode==KEY_LEFT and InputMap.action_get_events("move_right")[1].physical_keycode==KEY_RIGHT and InputMap.action_get_events("debug")[0].physical_keycode==KEY_F3,"arrow and debug physical key mappings")
  await ticks(4)
+ check(InputMap.has_action("action") and not InputMap.has_action("heavy") and not InputMap.has_action("spin") and not InputMap.has_action("dodge"),"one action and jump replace separate attack/dodge mappings")
  check(game.mode == "title" and game.hud.title.visible,"title and native scene load")
  game.begin_intro()
  game.mode_clock = 12
@@ -104,35 +105,36 @@ func run() -> void:
  enemy.enabled = true
  enemy.home = enemy.position
  await ticks(5)
- p.start_attack("jab")
- await ticks(13)
+ p.press_action()
+ await ticks(24)
  check(enemy.health==3 and p.attack_hits>0,"active hitbox strikes an actual enemy hurtbox once")
  check(enemy.state == "DANO" and enemy.velocity.length()>0,"enemy reacts with knockback and stun")
  await ticks(15)
  check(enemy.health==3,"single swing deduplicates repeated overlaps")
  enemy.queue_free(); await ticks(20)
- # Combo transitions to distinct cross and kick.
- p.attack = ""; p.start_attack("jab"); p.start_attack("jab")
- await ticks(42)
- check(p.attack == "cross","buffered second input chains to cross")
- p.start_attack("jab")
- await ticks(45)
- check(p.attack == "kick","third input chains to kick")
+ # Same button chains spin, medium punch and long strong punch.
+ p.cancel_combo(); p.press_action(); p.press_action()
+ await ticks(55)
+ check(p.attack == "medium","buffered second input chains spin to medium")
+ p.press_action()
+ await ticks(36)
+ check(p.attack == "strong","third input chains medium to strong")
  await ticks(80)
  var box: PamProp = game.add_prop("crate",Vector3(0,0,-7))
  await ticks(5)
  var before_crates: int = game.crates
  p.facing = Vector3.FORWARD
- p.start_attack("heavy")
+ p.press_action()
  await ticks(60)
- check(game.crates == before_crates+1 and not is_instance_valid(box),"physical heavy hit breaks crate and releases pickup")
+ check(game.crates == before_crates+1 and not is_instance_valid(box),"physical spin breaks crate and releases pickup")
  # Attack without overlap cannot hurt.
  enemy = game.spawn_enemy(Vector3(2.3,.1,-7))
- enemy.enabled = false
- p.start_attack("spin")
+ enemy.enabled = true
+ enemy.set_physics_process(false)
+ p.press_action()
  await ticks(100)
  check(enemy.health==4,"attack outside hurtbox leaves enemy health unchanged")
- enemy.enabled = true
+ enemy.set_physics_process(true)
  await settle_at(Vector3(2.3,.1,-6.0))
  p.invulnerable = 0
  var old_health := p.health
@@ -142,13 +144,15 @@ func run() -> void:
  await settle_at(Vector3(0,.1,-6))
  p.invulnerable=0
  p.input_override=false
- Input.action_press("dodge")
+ Input.action_press("jump")
  await ticks(2)
- Input.action_release("dodge")
- var hp := p.health
- check(p.dodge_time>0 and p.velocity.length()>8 and not p.receive_hit(1,Vector3.ZERO) and p.health==hp,"actual dodge input moves and rejects incoming damage")
+ Input.action_release("jump")
+ Input.action_press("action")
+ await ticks(2)
+ Input.action_release("action")
+ check(p.attack=="spin" and p.velocity.y>0,"the same action button starts spin in the air")
  p.input_override=true
- await ticks(90)
+ await ticks(100)
  # Checkpoint through proximity, then death and actual respawn callback.
  await settle_at(Vector3(game.center(-47)+1.5,.3,-47))
  await ticks(5)

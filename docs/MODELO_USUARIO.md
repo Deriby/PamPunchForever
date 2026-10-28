@@ -6,7 +6,7 @@ O usuário enviou `5d3ee866736f057f78c3c146b673b7a2.glb` em T-pose e pediu a rem
 
 ![Rig do modelo do usuário](captures/pam-usuario-rig.png)
 
-![Combo e giro — revisão 3](captures/pam-usuario-cartoon-v3.gif)
+![Combo de uma ação na fase](captures/pam-combo-acao.gif)
 
 ![Joelhos, cotovelo e corrida](captures/pam-usuario-articulacoes.gif)
 
@@ -32,7 +32,13 @@ Os clipes `Guard`, `Jab`, `Cross`, `Kick`, `Combo`, `Spin`, `Run`, `ElbowFlex` e
 
 O rig é FK na execução; o apoio de pés é resolvido e gravado na autoria. Não há ossos individuais para os dedos nem novas formas faciais. A piscada do estudo anterior não foi transferida à malha do usuário. Em Blender, selecione `PamRig` e escolha uma ação `PamUser_*` no Action Editor para reproduzir os movimentos; a posição de repouso permanece em T.
 
-## Mãos corrigidas e alcance — revisão 3
+## Integração jogável — revisão 4
+
+O modelo agora é o Pam ativo da Fase 1, com um botão de ação e um de pulo: **giro → soco médio → soco forte de longo alcance**. J / X encadeia os golpes; Espaço / A pula. As colisões seguem os punhos do esqueleto na física, com varredura e bloqueio por paredes. O GLB contém 12 clipes, incluindo os novos `Medium`, `Strong`, `Jump` e o `Combo` recomposto. Detalhes, controles e verificações atuais em [COMBATE_DOIS_BOTOES.md](COMBATE_DOIS_BOTOES.md).
+
+As seções abaixo registram as revisões anteriores de vinculação e animação. A antiga separação entre modelo e fase foi resolvida nesta revisão.
+
+## Mãos corrigidas e alcance — revisão 3 (histórico)
 
 A passagem do punho tinha pesos de antebraço misturados à mão; o escalonamento herdado também podia deformar a forma dos dedos durante a rotação. Os 1.409 vértices da região de mãos/polegares em Blender agora seguem integralmente o osso da mão, com uma transição estreita no punho. A malha exportada tem 1.960 vértices nessa região, contando as divisões de UV/normal. Não houve alteração da escultura dos dedos, geometria de repouso, normais, UVs, índices, matrizes de vínculo ou imagens PBR; a comparação binária dos dois GLBs confirmou esses invariantes. Os pesos foram corrigidos localmente.
 
@@ -66,7 +72,7 @@ Uma segunda importação foi feita em um projeto limpo, contendo apenas os dois 
 
 A importação headless retorna código 0, mantendo o diagnóstico interno `Parameter "t" is null` do renderizador dummy. A revisão gráfica terminou com `PAM_USER_MODEL_CHECKS_OK` e `PAM_USER_MODEL_GODOT_OK`, sem erro de script. O Blender registra Draco indisponível e aviso de sampler compartilhado ao exportar a textura packed; o arquivo usa geometria sem Draco e os pixels dos mapas foram conferidos.
 
-## Reproduzir e continuar
+## Reprodução das revisões de asset (histórico)
 
 ```sh
 blender -b -t 4 -P tools/user_model/remove_tail.py
@@ -88,4 +94,4 @@ O `.blend` intermediário da reparação é gerado pelo primeiro comando e não 
 
 Para refinar apenas a animação a partir da fonte distribuída, execute `animate.py`, importe no Godot e repita a revisão; não é preciso refazer a remoção do rabo nem os pesos. O armature oculto de referência permanece intacto, permitindo repetir a geração. Ferramentas: Blender 4.3.2, Python/Pillow, FFmpeg (MP4) e Godot 4.4.1. Não há plugin externo para execução.
 
-O novo modelo está separado do personagem ativo da Fase 1. Adaptar o controlador de animação e sincronizar os contatos/hitboxes com os clipes continua como próximo trabalho de integração. Os testes desta revisão cobrem o asset, importação e animação; não houve novo teste de percurso, de desempenho em GPU ou de conforto de gameplay. Deformações extremas da roupa e qualidade artística ainda podem precisar de ajustes após revisão visual.
+A integração atual usa `pam_animator.gd` e os testes de combate/percurso descritos em COMBATE_DOIS_BOTOES.md. Ainda não houve teste manual de conforto com controle nem medição em GPU. Deformações extremas e qualidade artística continuam sujeitas à revisão visual.

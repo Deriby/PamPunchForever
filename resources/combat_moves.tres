@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="PamCombatMoves" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/combat_moves.gd" id="1"]
+[resource]
+script = ExtResource("1")
+data = {
+  "order": ["spin", "medium", "strong"],
+  "chain_grace": 0.22,
+  "blend_time": 0.045,
+  "movement_factor": 0.36,
+  "moves": {
+    "spin": {
+      "label": "GIRO", "clip": "Spin", "windup": 0.075,
+      "active_end": 0.335, "duration": 0.52, "chain_at": 0.43,
+      "clip_frames": [0, 9, 27, 42], "bones": ["hand.L", "hand.R"],
+      "radius": 0.17, "damage": 1, "knockback": 1.25, "step_speed": 0.0
+    },
+    "medium": {
+      "label": "SOCO MÉDIO", "clip": "Medium", "windup": 0.10,
+      "active_end": 0.18, "duration": 0.38, "chain_at": 0.28,
+      "clip_frames": [0, 6, 8, 21], "bones": ["hand.R"],
+      "radius": 0.16, "damage": 1, "knockback": 2.0, "step_speed": 0.55
+    },
+    "strong": {
+      "label": "SOCO FORTE", "clip": "Strong", "windup": 0.16,
+      "active_end": 0.27, "duration": 0.60, "chain_at": 0.60,
+      "clip_frames": [0, 9, 12, 30], "bones": ["hand.L"],
+      "radius": 0.20, "damage": 3, "knockback": 8.5, "step_speed": 1.0
+    }
+  }
+}

@@ -1,6 +1,6 @@
 # Estado da direção de arte
 
-**Direção atual:** o usuário forneceu seu próprio Pam em T-pose e pediu a remoção do rabinho e aplicação do rig. Esse é o modelo prioritário. A [edição e rig](MODELO_USUARIO.md) preserva sua identidade, fecha a região do rabo e adapta nove clipes às novas proporções. A integração ao personagem ativo da fase permanece pendente. Os estudos 03–06 anteriores são referências históricas de desenvolvimento.
+**Direção atual:** o usuário forneceu seu próprio Pam em T-pose e pediu a remoção do rabinho e aplicação do rig. Esse é o modelo prioritário. A [edição e rig](MODELO_USUARIO.md) preserva sua identidade, fecha a região do rabo e possui 12 clipes. O modelo está integrado ao personagem ativo da fase, com ação para giro → médio → forte e botão de pulo. Veja [o combate atual](COMBATE_DOIS_BOTOES.md). Os estudos 03–06 anteriores são referências históricas de desenvolvimento.
 
 **Aplicado nesta revisão, sujeito à avaliação artística:** Jaburanga, assassino, duas variações de guardião, árvores, vegetação baixa e alta, rochas, raízes, terra/musgo, ruínas, portão, ponte, balsa, caixas, explosivos, altar e colecionáveis. Todos estão integrados à cena e possuem materiais próprios. As folhas de Jaburanga continuam a referência prioritária; o assassino e os guardiões são desenhos originais de desenvolvimento.
 

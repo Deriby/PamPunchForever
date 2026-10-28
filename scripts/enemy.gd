@@ -120,12 +120,12 @@ func receive_hit(damage: int, knock: Vector3, kind: String) -> bool:
   return true
  health -= damage
  state = "DANO"
- timer = .42 if kind != "heavy" else .7
- velocity = knock + Vector3.UP*(2.8 if kind in ["heavy","kick","air"] else 1.3)
+ timer = .7 if kind in ["strong","heavy"] else .42
+ velocity = knock + Vector3.UP*(2.8 if kind in ["strong","heavy","kick","air"] else 1.3)
  telegraph.visible = false
  if trail:
   trail.impact(global_position+Vector3.UP*.8,Color("ffd584"),14,1.1)
-  trail.freeze_frame(.05 if kind != "heavy" else .085)
+  trail.freeze_frame(.085 if kind in ["strong","heavy"] else .05)
   trail.sound("hit",.65)
  if health <= 0: finish()
  return true

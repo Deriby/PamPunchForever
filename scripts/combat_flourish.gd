@@ -2,16 +2,20 @@ class_name CombatFlourish
 extends Node3D
 ## Small mesh strokes at the wrists/foot. No mesh or rest-pose edits.
 ## sample() uses clip time, so pause, slow motion and frame stepping stay in sync.
+const MOVES = preload("res://resources/combat_moves.tres")
 
 const WINDOWS := {
 	"Jab": [[4, 11, "hand.R"]],
 	"Cross": [[5, 12, "hand.L"]],
+	"Medium": [[4, 12, "hand.R"]],
+	"Strong": [[7, 18, "hand.L"]],
 	"Kick": [[7, 16, "foot.R"]],
 	"Combo": [[4, 11, "hand.R"], [14, 22, "hand.L"], [28, 38, "foot.R"]],
 	"Spin": [[9, 28, "hand.R"], [9, 28, "hand.L"]]
 }
 const ACCENTS := {
 	"Jab": [[6, "hand.R"]], "Cross": [[7, "hand.L"]],
+	"Medium": [[6, "hand.R"]], "Strong": [[9, "hand.L"]],
 	"Kick": [[9, "foot.R"]], "Combo": [[6, "hand.R"], [16, "hand.L"], [30, "foot.R"]]
 }
 var mesh := ImmediateMesh.new()
@@ -22,6 +26,7 @@ var last_clip := ""
 var last_time := -1.0
 var stroke_count := 0
 var accent_count := 0
+var show_accents := true
 
 func _ready() -> void:
 	var material := StandardMaterial3D.new()
@@ -67,7 +72,8 @@ func ribbon(points: Array, color: Color, width: float) -> void:
 		var tangent := b-a
 		if tangent.length_squared() < .00002:
 			continue
-		var view := to_local(get_viewport().get_camera_3d().global_position)-(a+b)*.5
+		var camera := get_viewport().get_camera_3d()
+		var view := to_local(camera.global_position)-(a+b)*.5 if camera else Vector3(0,1,4)
 		var side := tangent.cross(view).normalized()
 		if side.length_squared() < .1:
 			side = Vector3.RIGHT
@@ -76,7 +82,24 @@ func ribbon(points: Array, color: Color, width: float) -> void:
 		triangle(a-side*old_width, a+side*old_width, b+side*new_width, color)
 		triangle(a-side*old_width, b+side*new_width, b-side*new_width, color)
 
+func has_motion(points: Array) -> bool:
+	for i in range(1,points.size()):
+		var here: Vector3 = points[i]["point"]
+		var previous: Vector3 = points[i-1]["point"]
+		if here.distance_squared_to(previous) >= .00002:
+			return true
+	return false
+
 func sample(skeleton: Skeleton3D, clip: String, time: float) -> void:
+	if clip == "Combo":
+		var elapsed := time
+		for kind in MOVES.order():
+			var info := MOVES.move(kind)
+			var duration: float = info["duration"] if kind == MOVES.order().back() else info["chain_at"]
+			if elapsed <= duration or kind == MOVES.order().back():
+				sample(skeleton,info["clip"],MOVES.clip_time(kind,elapsed))
+				return
+			elapsed -= duration
 	if clip != last_clip or time < last_time or time-last_time > .12:
 		clear()
 	last_clip = clip
@@ -92,14 +115,14 @@ func sample(skeleton: Skeleton3D, clip: String, time: float) -> void:
 			points.append({"point":tip(skeleton,name), "time":time})
 		while not points.is_empty() and time-float(points[0]["time"]) > .105:
 			points.pop_front()
-	for marker in ACCENTS.get(clip, []):
+	for marker in ACCENTS.get(clip, []) if show_accents else []:
 		var at := float(marker[0])/30.0
 		if advanced and last_time < at and time >= at:
 			accents.append({"point":tip(skeleton,marker[1]), "time":at})
 	accents = accents.filter(func(a: Dictionary) -> bool: return time-float(a["time"]) <= .125)
 	stroke_count = 0
 	for points: Array in paths.values():
-		if points.size() > 1:
+		if has_motion(points):
 			stroke_count += 1
 	accent_count = accents.size()
 	if stroke_count == 0 and accent_count == 0:
@@ -116,7 +139,8 @@ func sample(skeleton: Skeleton3D, clip: String, time: float) -> void:
 		var center: Vector3 = accent["point"]
 		var radius := lerpf(.070,.16,age)
 		var alpha := 1.0-age
-		var camera_basis := global_basis.inverse()*get_viewport().get_camera_3d().global_basis
+		var camera := get_viewport().get_camera_3d()
+		var camera_basis := global_basis.inverse()*camera.global_basis if camera else Basis.IDENTITY
 		for i in range(5):
 			var angle := i*TAU/5.0
 			var dir := camera_basis*Vector3(cos(angle),sin(angle),0)

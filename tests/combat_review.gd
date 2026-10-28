@@ -47,7 +47,7 @@ func exercise() -> void:
 	key(stage,KEY_1)
 	assert(stage.clip == "Combo" and not stage.paused)
 	key(stage,KEY_5)
-	assert(stage.clip == "Kick")
+	assert(stage.clip == "Jump")
 	key(stage,KEY_V)
 	assert(stage.camera.position.is_equal_approx(Vector3(6,1.55,1.5)))
 	key(stage,KEY_V)

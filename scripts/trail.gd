@@ -303,7 +303,7 @@ func _process(delta: float) -> void:
  elif mode == "intro": update_intro()
  elif mode == "duel":
   if mode_clock > 11: begin_aftermath()
-  hud.hint.text = "J · atacar    K · forte    Shift · esquivar     —     Ele está muito acima de você."
+  hud.hint.text = "J / X · giro → soco médio → soco forte    Espaço / A · pular"
  elif mode == "aftermath": update_aftermath()
  elif mode == "play":
   run_time += delta
@@ -381,7 +381,7 @@ func begin_duel() -> void:
  player.controllable = true
  camera.cinematic = false
  hud.show_mode(mode)
- toast("VOCÊ NÃO VAI LEVÁ-LO!", "Enfrente o assassino. J / K / L para golpear; Shift para esquivar.",4)
+ toast("VOCÊ NÃO VAI LEVÁ-LO!", "Enfrente o assassino. J / X encadeia os golpes; Espaço / A pula.",4)
 
 func begin_aftermath() -> void:
  if mode == "aftermath": return
@@ -390,7 +390,7 @@ func begin_aftermath() -> void:
  assassin.enabled = false
  player.controllable = false
  player.respawning = false
- player.attack = ""
+ player.cancel_combo()
  player.health = 1
  player.position = Vector3(0,.1,.8)
  player.velocity = Vector3.ZERO
@@ -425,7 +425,7 @@ func start_trail() -> void:
 func update_progress() -> void:
  var z := player.position.z
  if z > -15: hud.hint.text = "WASD / setas · mover     Espaço · pular (segure para subir mais)     J · quebrar caixas"
- elif z > -25: hud.hint.text = "J, J, J · combo de três golpes     K · ataque forte     L · giro     Shift · esquiva"
+ elif z > -25: hud.hint.text = "J, J, J / X, X, X · giro → soco médio → soco forte     Espaço / A · pular"
  elif z > -31: hud.hint.text = "A ponte está à frente. Salte para alcançar a margem mais alta."
  elif z > -43: hud.hint.text = "Pule sobre o inimigo ou ataque no ar com J. Cuidado com as caixas de pavio!"
  elif z > -52: hud.hint.text = "Aproxime-se do altar para recuperar o fôlego e salvar seu caminho."
@@ -438,7 +438,7 @@ func update_progress() -> void:
   arena_spawned = true
   arena_enemies.append(spawn_enemy(Vector3(center(-93)-1.2,.25,-93)))
   arena_enemies.append(spawn_enemy(Vector3(center(-94)+1.2,.25,-94)))
-  toast("A CLAREIRA DOS GUARDIÕES", "Leia a antecipação dos golpes. Esquive e contra-ataque.",4)
+  toast("A CLAREIRA DOS GUARDIÕES", "Leia a antecipação dos golpes. Mova-se, pule e encadeie o contra-ataque.",4)
  if arena_spawned and not arena_done:
   arena_done = true
   for e in arena_enemies:

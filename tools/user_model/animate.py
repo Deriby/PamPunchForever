@@ -10,7 +10,7 @@ import math
 import struct
 import sys
 from pathlib import Path
-from mathutils import Matrix, Vector
+from mathutils import Matrix, Vector, Euler
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -26,6 +26,7 @@ for track in source.animation_data.nla_tracks:
     track.mute = True
 source.hide_viewport = False
 solver = Retargeter(source, rig)
+combat = json.loads((ROOT/'resources/combat_moves.tres').read_text().split('data = ',1)[1])
 
 
 def fingerprint(weights=True):
@@ -76,6 +77,19 @@ def punch(side, beat):
     p[side] = arm(side, wrist, direction, stretch=stretch, fist=fist, lead=lead)
     other = 'L' if side == 'R' else 'R'
     p[other] = arm(other, (-s*.235, -.19, .94), (s*.20, -.50, .86), (-s*.36,-.035,.48))
+    return p
+
+
+def action_punch(side, beat, strong=False):
+    p = punch(side,beat)
+    s = -1 if side == 'L' else 1
+    if beat == 'hit':
+        p[side] = arm(side,(s*.155,-.69 if strong else -.47,.925),(0,-1,.06),
+                      stretch=1.34 if strong else 1.15,fist=1.15 if strong else 1.085,
+                      lead=1.20 if strong else .40)
+    elif beat == 'follow':
+        p[side] = arm(side,(s*.10,-.54 if strong else -.41,.94),(-s*.22,-1,.09),
+                      stretch=1.13 if strong else 1.045,fist=1.045,lead=.70 if strong else .25)
     return p
 
 
@@ -144,6 +158,15 @@ clips = {
              (21,21,S('turn2')), (27,27,S('open')), (30,30,S('land')),
              (35,35,G()), (42,42,G())],
 }
+M = lambda beat: action_punch('R',beat)
+H = lambda beat: action_punch('L',beat,True)
+clips['Medium'] = [(0,0,G()),(3,4,M('load')),(5,5,between(M('load'),M('hit'),.48)),
+                   (6,6,M('hit')),(8,7,M('hit')),(11,10,M('follow')),
+                   (15,14,M('recoil')),(21,19,G())]
+clips['Strong'] = [(0,0,G()),(5,4,H('load')),(8,5,between(H('load'),H('hit'),.48)),
+                   (9,6,H('hit')),(12,7,H('hit')),(16,10,H('follow')),
+                   (22,14,H('recoil')),(30,19,G())]
+clips['Jump'] = [(0,0,G()),(30,30,G())]
 
 
 def orient(name, head, tail, scale):
@@ -196,7 +219,9 @@ def solve_arm(side, spec):
     bpy.context.view_layer.update()
 
 
-for name, original in tracks.items():
+items = [(name,action) for name,action in tracks.items() if name != 'Combo']
+items += [('Medium',tracks['Jab']),('Strong',tracks['Cross']),('Jump',tracks['Guard'])]
+for name, original in items:
     source.animation_data.action = original
     action = bpy.data.actions.new('PamUser_'+name)
     rig.animation_data.action = None
@@ -230,6 +255,14 @@ for name, original in tracks.items():
                 rig.pose.bones['shin.R'].scale.y *= 1+.12*spec['kick']
                 rig.pose.bones['foot.R'].scale *= 1+.055*spec['kick']
                 bpy.context.view_layer.update()
+            if name == 'Jump':
+                for limb,angles in {'thigh.R':(-30,0,0),'shin.R':(65,0,0),'foot.R':(-15,0,0),
+                                    'thigh.L':(-15,0,0),'shin.L':(45,0,0),'foot.L':(-10,0,0)}.items():
+                    bone = rig.pose.bones[limb]
+                    rest = bone.bone.matrix_local.to_quaternion()
+                    bone.rotation_quaternion = rest.inverted()@Euler(tuple(math.radians(a) for a in angles),'XYZ').to_quaternion()@rest
+                    bone.location = (0,0,0)
+                bpy.context.view_layer.update()
         baked.append({bone.name: bone.matrix_basis.copy() for bone in rig.pose.bones})
     rig.animation_data.action = action
     for frame, pose in enumerate(baked):
@@ -248,6 +281,62 @@ for name, original in tracks.items():
             key.interpolation = 'LINEAR'
     rig.animation_data.action = None
     print('PAM_USER_CARTOON_BAKED',name,end+1)
+
+# The exported Combo is the same buffered sequence the game executes. The move
+# table is a native Godot resource whose JSON-compatible data is read above.
+def clip_time(info,time):
+    times = [0,info['windup'],info['active_end'],info['duration']]
+    frames = info['clip_frames']
+    for i in range(3):
+        if time <= times[i+1]:
+            t = max(0,min(1,(time-times[i])/(times[i+1]-times[i])))
+            return (frames[i]+(frames[i+1]-frames[i])*t)/30
+    return frames[-1]/30
+
+
+def sample_action(name,time):
+    rig.animation_data.action = bpy.data.actions['PamUser_'+name]
+    frame = time*30
+    scene.frame_set(math.floor(frame),subframe=frame%1)
+    return {bone.name:bone.matrix_basis.copy() for bone in rig.pose.bones}
+
+
+segments, total = [], 0.0
+for kind in combat['order']:
+    info = combat['moves'][kind]
+    duration = info['duration'] if kind == combat['order'][-1] else info['chain_at']
+    segments.append((total,total+duration,info))
+    total += duration
+poses = []
+for frame in range(math.ceil(total*30)+1):
+    time = min(total,frame/30)
+    index = next((i for i,(_,end,_) in enumerate(segments) if time < end),len(segments)-1)
+    start,end,info = segments[index]
+    elapsed = time-start
+    pose = sample_action(info['clip'],clip_time(info,elapsed))
+    if index > 0 and elapsed < combat['blend_time']:
+        pstart,pend,previous = segments[index-1]
+        old = sample_action(previous['clip'],clip_time(previous,pend-pstart))
+        t = elapsed/combat['blend_time']
+        pose = {name:solver.interpolate_matrix(old[name],pose[name],t) for name in pose}
+    poses.append(pose)
+action = bpy.data.actions.new('PamUser_Combo')
+rig.animation_data.action = action
+for frame,pose in enumerate(poses):
+    for bone in rig.pose.bones:
+        bone.matrix_basis = pose[bone.name]
+        for path in ['location','rotation_quaternion','scale']:
+            bone.keyframe_insert(data_path=path,frame=frame,group=bone.name)
+track = rig.animation_data.nla_tracks.new()
+track.name = 'Combo'
+track.strips.new('Combo',0,action)
+track.mute = True
+action.use_fake_user = True
+for curve in action.fcurves:
+    for key in curve.keyframe_points:
+        key.interpolation = 'LINEAR'
+rig.animation_data.action = None
+print('PAM_SINGLE_ACTION_COMBO_BAKED',len(poses),total)
 
 assert fingerprint() == unchanged, 'No further edits to mesh, corrected weights or rest bones'
 assert fingerprint(weights=False) == geometry_rest_before, 'Original geometry and rest pose must remain identical'
@@ -276,5 +365,13 @@ metadata.update({'combat_revision':3,'bind_mesh_weights_rest_sha256':unchanged,
     'spin_forearm_length':1.18,'straight_wrist_at_impact':True,
     'effects':'Godot CombatFlourish; separate from GLB',
     'combo_impact_frames':[6,16,30],'spin_trail_frames':[9,27]})
+metadata.update({'combat_revision':4,'clips':[track.name for track in rig.animation_data.nla_tracks],
+    'action_order':combat['order'],'action_config':'resources/combat_moves.tres',
+    'action_combo_seconds':total,'baked_combo_seconds':math.ceil(total*30)/30,
+    'strong_forearm_length':1.34,'medium_forearm_length':1.15,
+    'peak_forearm_length':1.34,'peak_fist_scale':1.15,
+    'bind_mesh_weights_rest_unchanged':hand_weights['changed_vertices'] == 0,
+    'combo_impact_frames':[round((start+info['windup'])*30,6) for start,end,info in segments if info['clip'] in ['Medium','Strong']],
+    'spin_trail_frames':[round(combat['moves']['spin'][key]*30,6) for key in ['windup','active_end']]})
 meta_path.write_text(json.dumps(metadata,indent=2)+'\n')
 print('PAM_USER_CARTOON_EXPORT_OK',unchanged)

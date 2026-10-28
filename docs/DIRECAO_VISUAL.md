@@ -2,7 +2,7 @@
 
 **Diretriz atual:** o usuário substituiu os estudos anteriores pelo seu próprio GLB em T-pose. O [modelo do usuário](MODELO_USUARIO.md) é a base visual prioritária do Pam. A edição remove o rabinho e adapta o rig e os movimentos cartunescos às suas proporções. As texturas fornecidas e a forma da cabeça/corpo foram preservadas fora da reparação localizada. A construção/animação PS1 continua como referência de linguagem; este modelo não é uma recuperação de dados comerciais.
 
-O restante deste documento registra a revisão anterior. O **Pam, estudo 03**, visível em `docs/captures/pam-modelo-v3.png`, chegou a ser aprovado, mas essa aprovação foi retirada. O GLB dessa revisão permanece no jogo enquanto o novo estudo é avaliado. `assets/source/approved_pam.sha256` conserva apenas sua identificação histórica, sem representar aprovação vigente.
+O restante deste documento registra a revisão anterior. O **Pam, estudo 03**, visível em `docs/captures/pam-modelo-v3.png`, chegou a ser aprovado, mas essa aprovação foi retirada. O GLB dessa revisão foi substituído no personagem jogável pelo modelo fornecido pelo usuário. `assets/source/approved_pam.sha256` conserva apenas sua identificação histórica, sem representar aprovação vigente.
 
 A revisão anterior usou volumes facetados desenhados, pintura integrada ao rosto, silhuetas reconhecíveis, couro/tecido foscos, cores quentes nas roupas e verdes naturais no ambiente. Naquela etapa o rosto do Pam e suas proporções foram preservados. Não foram usados modelos de jogos comerciais.
 

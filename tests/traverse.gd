@@ -43,9 +43,10 @@ func run() -> void:
    var facing := nearest.position-p.position
    facing.y=0
    p.facing = facing.normalized()
-   if distance<1.7:
+   if distance<1.05:
     p.test_motion = Vector2.ZERO
-    p.start_attack("heavy")
+   if distance<1.6:
+    p.press_action()
   # Jump all exposed water edges; platform at -55 is used as intermediate landing.
   var edge := (p.position.z < -27 and p.position.z > -29.3) or (p.position.z < -50.7 and p.position.z > -52.1) or (p.position.z < -54 and p.position.z > -57.5) or (p.position.z < -74.6 and p.position.z > -77.8)
   if edge and p.is_on_floor() and frame-last_jump>50:

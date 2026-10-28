@@ -9,11 +9,14 @@
     "Jab",
     "Cross",
     "Kick",
-    "Combo",
     "Spin",
     "Run",
     "ElbowFlex",
-    "KneeFlex"
+    "KneeFlex",
+    "Medium",
+    "Strong",
+    "Jump",
+    "Combo"
   ],
   "max_weight_influences": 4,
   "automatic_heat_unweighted_repaired": 0,
@@ -22,22 +25,21 @@
   "facial_morphs_added": false,
   "original_pbr_images_preserved": true,
   "animation_method": "Retargeted bone orientations with twist calibration and new leg support IK",
-  "combat_revision": 3,
+  "combat_revision": 4,
   "bind_mesh_weights_rest_sha256": "df1ac3af853161058d85fc53d1944fc27120a23eb5e8fbe753dc4ee89eda11cc",
-  "bind_mesh_weights_rest_unchanged": false,
+  "bind_mesh_weights_rest_unchanged": true,
   "arm_ik": "Baked wrist goals and elbow poles on user proportions; stable wrist roll",
   "animation_only_stretch": true,
-  "peak_forearm_length": 1.25,
-  "peak_fist_scale": 1.135,
+  "peak_forearm_length": 1.34,
+  "peak_fist_scale": 1.15,
   "effects": "Godot CombatFlourish; separate from GLB",
   "combo_impact_frames": [
-    6,
-    16,
-    30
+    15.9,
+    26.1
   ],
   "spin_trail_frames": [
-    9,
-    27
+    2.25,
+    10.05
   ],
   "hand_weight_correction": {
     "changed_vertices": 0,
@@ -56,5 +58,15 @@
   "bind_geometry_rest_sha256": "050c1c54c433b7ab8dcb77201cc0d474dc7d2dd860b34dd8c6b9f80ef7055877",
   "bind_geometry_rest_unchanged": true,
   "spin_forearm_length": 1.18,
-  "straight_wrist_at_impact": true
+  "straight_wrist_at_impact": true,
+  "action_order": [
+    "spin",
+    "medium",
+    "strong"
+  ],
+  "action_config": "resources/combat_moves.tres",
+  "action_combo_seconds": 1.31,
+  "strong_forearm_length": 1.34,
+  "medium_forearm_length": 1.15,
+  "baked_combo_seconds": 1.3333333333333333
 }

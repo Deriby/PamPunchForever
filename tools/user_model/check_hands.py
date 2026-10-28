@@ -23,7 +23,7 @@ for side, vertices in hands.items():
         body.vertex_groups[v.groups[0].group].name != 'hand.'+side)
 worst = 1.0
 worst_pose = None
-for clip in ['Guard','Jab','Cross','Kick','Combo','Spin','Run']:
+for clip in ['Guard','Jab','Cross','Kick','Combo','Spin','Run','Medium','Strong','Jump']:
     action = bpy.data.actions['PamUser_'+clip]
     rig.animation_data.action = action
     # Include the transitions between baked keys, where inherited scale can shear.
@@ -38,7 +38,7 @@ for clip in ['Guard','Jab','Cross','Kick','Combo','Spin','Run']:
                 worst, worst_pose = anisotropy, [clip,half/2,side]
 
 metrics = {}
-for clip,frame,side in [('Jab',6,'R'),('Cross',7,'L'),('Kick',9,'R'),('Spin',15,'R')]:
+for clip,frame,side in [('Jab',6,'R'),('Cross',7,'L'),('Kick',9,'R'),('Spin',15,'R'),('Medium',6,'R'),('Strong',9,'L')]:
     rig.animation_data.action = bpy.data.actions['PamUser_'+clip]
     scene.frame_set(frame)
     if clip == 'Kick':
@@ -64,7 +64,7 @@ if baseline:
     report['reach_increase_percent'] = {clip:
         (metrics[clip]['radial_mesh_reach' if clip == 'Spin' else 'forward_mesh_reach']/
          before['reach'][clip]['radial_mesh_reach' if clip == 'Spin' else 'forward_mesh_reach']-1)*100
-        for clip in metrics}
+        for clip in metrics if clip in before['reach']}
 path = Path(os.environ.get('PAM_HAND_REPORT','/workspace/deliverables/pam_cartoon_v3/hands.json'))
 path.parent.mkdir(parents=True,exist_ok=True)
 path.write_text(json.dumps(report,indent=2)+'\n')
@@ -72,6 +72,7 @@ print('PAM_HAND_REACH_MEASURED',json.dumps(report),flush=True)
 if not os.environ.get('PAM_HAND_CAPTURE_BASELINE'):
     assert not any(mixed.values()), mixed
     assert worst < 1.04, ('Hand must keep its shape through stretch',worst,worst_pose)
+    assert metrics['Strong']['forward_mesh_reach'] > metrics['Medium']['forward_mesh_reach']+.10
     if baseline:
         assert report['reach_increase_percent']['Jab'] > 10
         assert report['reach_increase_percent']['Cross'] > 10

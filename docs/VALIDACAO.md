@@ -1,3 +1,9 @@
+# Verificação atual do combate de dois botões
+
+O novo Pam está integrado à fase. O combate usa ação para giro → médio → forte e um botão de pulo. A validação atual passou 20/20 testes de combate em 30/120 FPS simulados, 33/33 de integração e percurso completo nas duas taxas, sem mortes. Configuração, comandos, resultados e limites atuais: [COMBATE_DOIS_BOTOES.md](COMBATE_DOIS_BOTOES.md).
+
+Os registros abaixo documentam a primeira versão da fase, anterior à troca do modelo e dos controles.
+
 # Validação executada
 
 **Revisão visual mais recente:** integração **32/32**, travessia completa sem mortes e quatro capturas de arte no Godot. Ver [DIRECAO_VISUAL.md](DIRECAO_VISUAL.md) e os logs `style-*`. Nesta revisão o renderizador por software marcou cerca de **2–3 FPS**; as medições anteriores abaixo são do primeiro conjunto de assets. O Pam aprovado foi preservado; elenco e ambiente de apoio foram atualizados.
