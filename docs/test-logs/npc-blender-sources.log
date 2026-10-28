@@ -1,0 +1,9 @@
+NPC_BLENDER_SOURCE_OK januri {"bones": 25, "clips": ["Idle", "Guard", "Walk", "Run", "Windup", "Attack", "Hit", "Defeat", "Power", "ElbowFlex", "KneeFlex"], "packed_images": ["texture_pbr_20250901", "texture_pbr_20250901_metallic-texture_pbr_20250901_roughness", "texture_pbr_20250901_normal"]}
+NPC_BLENDER_SOURCE_OK inimigo {"bones": 32, "clips": ["Idle", "Guard", "Walk", "Run", "Windup", "Attack", "Hit", "Defeat", "Power", "ElbowFlex", "KneeFlex"], "packed_images": ["texture_pbr_20250901", "texture_pbr_20250901_metallic-texture_pbr_20250901_roughness", "texture_pbr_20250901_normal"]}
+NPC_BLENDER_SOURCE_OK lar {"bones": 30, "clips": ["Idle", "Guard", "Walk", "Run", "Windup", "Attack", "Hit", "Defeat", "Power", "ElbowFlex", "KneeFlex"], "packed_images": ["texture_pbr_20250901", "texture_pbr_20250901_metallic-texture_pbr_20250901_roughness", "texture_pbr_20250901_normal"]}
+Blender 4.3.2
+Read blend: "/workspace/PamPunchForever/assets/source/npcs/januri_rig.blend"
+Read blend: "/workspace/PamPunchForever/assets/source/npcs/inimigo_rig.blend"
+Read blend: "/workspace/PamPunchForever/assets/source/npcs/lar_rig.blend"
+
+Blender quit

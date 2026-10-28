@@ -1,0 +1,49 @@
+{
+  "source": "assets/source/npcs/januri_original.glb",
+  "source_sha256": "f20b008e8a673f8e7d48d7b7901c3d9613cc27ad72b3fd42bf7e509aeeac6d38",
+  "name": "januri",
+  "role": "master",
+  "bones": 25,
+  "triangles": 50004,
+  "clips": [
+    "Idle",
+    "Guard",
+    "Walk",
+    "Run",
+    "Windup",
+    "Attack",
+    "Hit",
+    "Defeat",
+    "Power",
+    "ElbowFlex",
+    "KneeFlex"
+  ],
+  "uniform_scale": 1.829269886465847,
+  "original_min_z": -9.562992175915497e-09,
+  "height": 1.8,
+  "weights": {
+    "heat_unweighted_repaired": 34368,
+    "protected_hands": 1744,
+    "shell": 6414,
+    "hat": 2827,
+    "beard": 245,
+    "tails": 0,
+    "ribbon": 0,
+    "sheath": 0
+  },
+  "max_influences": 4,
+  "geometry_edited": false,
+  "rest_pose": "Supplied T-pose",
+  "tail_chains": {},
+  "rigid_accessories": [
+    "shell",
+    "hat",
+    "beard"
+  ],
+  "original_pbr_preserved": true,
+  "normal_preservation": {
+    "original_float_normals_restored": true,
+    "skin_attributes_preserved": true,
+    "export_vertices": 34385
+  }
+}

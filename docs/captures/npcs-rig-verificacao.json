@@ -1,0 +1,110 @@
+{
+	"captures": 9,
+	"engine": "4.4.1-stable (official)",
+	"inimigo": {
+		"attack_contact": [
+			0.166478410363197,
+			0.960350573062897,
+			0.521178841590881
+		],
+		"bones": 32,
+		"clips": [
+			"Attack",
+			"Defeat",
+			"ElbowFlex",
+			"Guard",
+			"Hit",
+			"Idle",
+			"KneeFlex",
+			"Power",
+			"Run",
+			"Walk",
+			"Windup"
+		],
+		"joint_angles": {
+			"elbow_R": 90.0000229950457,
+			"knee_L": 89.9997361271005,
+			"knee_R": 89.9997361271005
+		},
+		"max_rigid_scale_error": 0.0,
+		"pbr_size": [
+			4096,
+			4096
+		],
+		"tail_motion_degrees": {
+			"tail.L": 2.01401980155236,
+			"tail.R": 2.01518562946632
+		},
+		"triangles": 50000
+	},
+	"januri": {
+		"attack_contact": [
+			0.159825563430786,
+			0.979925751686096,
+			0.528611183166504
+		],
+		"bones": 25,
+		"clips": [
+			"Attack",
+			"Defeat",
+			"ElbowFlex",
+			"Guard",
+			"Hit",
+			"Idle",
+			"KneeFlex",
+			"Power",
+			"Run",
+			"Walk",
+			"Windup"
+		],
+		"joint_angles": {
+			"elbow_R": 90.0000025044782,
+			"knee_L": 89.999756617668,
+			"knee_R": 89.9997429572897
+		},
+		"max_rigid_scale_error": 0.000000214907601048253,
+		"pbr_size": [
+			4096,
+			4096
+		],
+		"tail_motion_degrees": {
+
+		},
+		"triangles": 50004
+	},
+	"lar": {
+		"attack_contact": [
+			0.174979686737061,
+			1.01967537403107,
+			0.524875402450562
+		],
+		"bones": 30,
+		"clips": [
+			"Attack",
+			"Defeat",
+			"ElbowFlex",
+			"Guard",
+			"Hit",
+			"Idle",
+			"KneeFlex",
+			"Power",
+			"Run",
+			"Walk",
+			"Windup"
+		],
+		"joint_angles": {
+			"elbow_R": 90.0000229950457,
+			"knee_L": 89.999715636533,
+			"knee_R": 89.999715636533
+		},
+		"max_rigid_scale_error": 0.000000214907601048253,
+		"pbr_size": [
+			4096,
+			4096
+		],
+		"tail_motion_degrees": {
+			"tail": 2.01440848200482
+		},
+		"triangles": 50000
+	}
+}

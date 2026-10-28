@@ -1,5 +1,18 @@
 # Inventário da revisão visual
 
+## Elenco ativo fornecido pelo usuário
+
+| GLB | Triângulos | Ossos | Clipes |
+|---|---:|---:|---:|
+| pam_usuario_rig | 49.970 | 22 | 12 |
+| npc_januri_rig | 50.004 | 25 | 11 |
+| npc_inimigo_rig | 50.000 | 32 | 11 |
+| npc_lar_rig | 50.000 | 30 | 11 |
+
+Os quatro usam os modelos recebidos. Os novos NPCs mantêm texturas PBR 4K e têm fontes editáveis em `assets/source/npcs/`. [Rigs e verificação](NPCS_USUARIO.md). As entradas `jaburanga`, `guardian`, `guardian_scout` e `assassin` na tabela histórica abaixo representam os modelos anteriores, que já não são instanciados pelo elenco ativo. O ambiente continua usando os assets de apoio abaixo.
+
+## Inventário histórico e ambiente
+
 Malhas e texturas originais geradas localmente. Contagens obtidas diretamente dos GLB exportados; não incluem instâncias da fase.
 
 | Asset | Triângulos | Bytes |

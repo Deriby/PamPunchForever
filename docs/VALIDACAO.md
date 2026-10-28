@@ -1,4 +1,8 @@
-# Verificação atual do combate de dois botões
+# Verificação atual: elenco fornecido com rig
+
+Mestre (`Januri.glb`), inimigo e Lar têm skins nativas, cotovelos, joelhos, acessórios e caudas articuladas, e já substituem o elenco anterior na fase. No Godot 4.4.1: **35/35 testes de integração**, **20/20 de combate em cada execução a 30/120 FPS** e travessia integral nas duas taxas, **0 mortes e 6 inimigos derrotados**. Verificação independente da geometria/UVs/normais/texturas e reabertura das três fontes Blender também passaram. Prévia, comandos, logs e limites: [NPCS_USUARIO.md](NPCS_USUARIO.md). As imagens são renders reais; não houve avaliação manual com controle ou GPU dedicada.
+
+# Histórico: combate de dois botões
 
 O novo Pam está integrado à fase. O combate usa ação para giro → médio → forte e um botão de pulo. A validação atual passou 20/20 testes de combate em 30/120 FPS simulados, 33/33 de integração e percurso completo nas duas taxas, sem mortes. Configuração, comandos, resultados e limites atuais: [COMBATE_DOIS_BOTOES.md](COMBATE_DOIS_BOTOES.md).
 

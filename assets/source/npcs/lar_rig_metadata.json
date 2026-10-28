@@ -1,0 +1,50 @@
+{
+  "source": "assets/source/npcs/lar_original.glb",
+  "source_sha256": "fd51cfc76a86c099845be9e0eaf6e56db8fb36deceadaef2a226b1f7ff563f4b",
+  "name": "lar",
+  "role": "assassin",
+  "bones": 30,
+  "triangles": 50000,
+  "clips": [
+    "Idle",
+    "Guard",
+    "Walk",
+    "Run",
+    "Windup",
+    "Attack",
+    "Hit",
+    "Defeat",
+    "Power",
+    "ElbowFlex",
+    "KneeFlex"
+  ],
+  "uniform_scale": 2.2180141710347954,
+  "original_min_z": -1.950057537669636e-08,
+  "height": 1.9,
+  "weights": {
+    "heat_unweighted_repaired": 38286,
+    "protected_hands": 761,
+    "shell": 0,
+    "hat": 1907,
+    "beard": 0,
+    "tails": 1275,
+    "ribbon": 854,
+    "sheath": 1205
+  },
+  "max_influences": 4,
+  "geometry_edited": false,
+  "rest_pose": "Supplied T-pose",
+  "tail_chains": {
+    "tail": 4
+  },
+  "rigid_accessories": [
+    "hat",
+    "sheath"
+  ],
+  "original_pbr_preserved": true,
+  "normal_preservation": {
+    "original_float_normals_restored": true,
+    "skin_attributes_preserved": true,
+    "export_vertices": 38306
+  }
+}

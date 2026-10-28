@@ -48,6 +48,9 @@ class Retargeter:
 
     def retarget(self, clip):
         for item in self.rig.pose.bones:
+            if item.name not in self.source.pose.bones:
+                item.matrix_basis = Matrix.Identity(4)
+                continue
             src = self.source.pose.bones[item.name]
             if item.parent:
                 rest_parent = self.rig.data.bones[item.parent.name].matrix_local

@@ -34,6 +34,14 @@ func run() -> void:
  await ticks(4)
  check(InputMap.has_action("action") and not InputMap.has_action("heavy") and not InputMap.has_action("spin") and not InputMap.has_action("dodge"),"one action and jump replace separate attack/dodge mappings")
  check(game.mode == "title" and game.hud.title.visible,"title and native scene load")
+ check(game.master.character == "januri" and game.master.skeleton.get_bone_count() == 25 and game.assassin.rig.character == "lar" and game.assassin.rig.skeleton.get_bone_count() == 30,"supplied master and Lar skins are the active opening cast")
+ var ordinary_rigs_ok := true
+ var ordinary_count := 0
+ for actor in game.enemy_root.get_children():
+  if actor is PamEnemy and not actor.boss:
+   ordinary_count += 1
+   ordinary_rigs_ok = ordinary_rigs_ok and actor.rig.character == "inimigo" and actor.rig.skeleton.get_bone_count() == 32
+ check(ordinary_count > 0 and ordinary_rigs_ok,"ordinary enemies use the supplied articulated ninja skin")
  game.begin_intro()
  game.mode_clock = 12
  await ticks(4)

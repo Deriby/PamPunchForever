@@ -11,7 +11,7 @@ var kills := 0
 var memory_found := false
 var checkpoint := Vector3(0,.2,-5)
 var checkpoint_set := false
-var master: Node3D
+var master: PamNpcAnimator
 var assassin: PamEnemy
 var props: Node3D
 var enemy_root: Node3D
@@ -58,7 +58,7 @@ func _ready() -> void:
  camera.fixed_position = Vector3(0,1.8,4.2)
  camera.fixed_target = Vector3(.35,.9,0)
  hud = PamHUD.new(); hud.trail = self; add_child(hud)
- master = PamArt.model("jaburanga"); add_child(master)
+ master = PamNpcAnimator.new(); master.character = "januri"; add_child(master)
  master.position = Vector3(-1.2,0,-2.6)
  master.rotation.y = .65
  assassin = PamEnemy.new();assassin.boss = true;assassin.player = player;assassin.trail = self
@@ -299,7 +299,7 @@ func spawn_enemy(pos: Vector3) -> PamEnemy:
 func _process(delta: float) -> void:
  mode_clock += delta
  if mode == "title":
-  PamArt.pose(master,mode_clock,.0)
+  master.pose("Idle",mode_clock)
  elif mode == "intro": update_intro()
  elif mode == "duel":
   if mode_clock > 11: begin_aftermath()
@@ -339,30 +339,30 @@ func update_intro() -> void:
  assassin.visible = t >= 8
  if t < 4:
   line_for("ALGUMAS SEMANAS ANTES…", "Enviado do Japão à Amazônia, Pam encontrou mais que um mestre.")
-  PamArt.pose(master,t,0,"jab",fmod(t,.8)/.8)
+  master.pose("Attack",fmod(t,.8)/.8*master.length("Attack"))
  elif t < 8:
   line_for("JABURANGA", "Ser rápido não basta. Saiba por que você luta.")
-  PamArt.pose(master,t,0)
+  master.pose("Idle",t)
  elif t < 10.5:
   assassin.visible = true
   line_for("UM VISITANTE SEM NOME", "Seu tempo acabou, velho mestre.")
   camera.fixed_position = Vector3(-4,2,-1)
   camera.fixed_target = Vector3(0,1,-3)
+  assassin.rig.pose("Guard",t)
  elif t < 16:
   line_for("", "")
   # Short rapid advances and precise strikes demonstrate Jaburanga's strength.
   var f := fmod(t-10.5,1.1)/1.1
   master.position = Vector3(-1.2,0,-2.6).lerp(Vector3(.55,0,-3.7),sin(f*PI)*.85)
   master.rotation.y = -1.0
-  PamArt.pose(master,t,3,"spin",f)
-  PamArt.pose(assassin.rig,t,0,"heavy",fmod(f+.5,1))
+  master.pose("Power",f*master.length("Power"))
+  assassin.rig.pose("Attack",fmod(f+.5,1)*assassin.rig.length("Attack"))
   if int((t-10.5)*3)>stage:
    stage = int((t-10.5)*3)
    impact(master.position+Vector3(.3,.9,-.2),Color("f5cf7f"),8,.8)
    sound("hit",.25)
  elif t < 19:
-  master.rotation.z = lerpf(master.rotation.z,-1.5,.08)
-  master.position.y = -.12
+  master.pose("Defeat",minf(1,(t-16)/2)*master.length("Defeat"))
   assassin.position = Vector3(.5,0,-3.8)
   line_for("PAM", "Mestre…? Não. NÃO!")
   camera.fixed_position = Vector3(-2,1.1,.8)
@@ -372,8 +372,9 @@ func update_intro() -> void:
 func begin_duel() -> void:
  if mode not in ["intro","title"]: return
  mode = "duel"; mode_clock = 0
- master.rotation.z = -1.5
- master.position = Vector3(-1.3,-.13,-2.7)
+ master.rotation.z = 0
+ master.pose("Defeat",master.length("Defeat"),false)
+ master.position = Vector3(-1.3,0,-2.7)
  assassin.visible = true;assassin.enabled = true
  assassin.position = Vector3(.4,.1,-3.8)
  assassin.home = assassin.position

@@ -4,7 +4,7 @@ extends CharacterBody3D
 signal defeated
 var player: PamPlayer
 var trail: Node
-var rig: Node3D
+var rig: PamNpcAnimator
 var home := Vector3.ZERO
 var health := 4
 var state := "PATRULHA"
@@ -14,6 +14,7 @@ var cooldown := 0.0
 var direction := Vector3.FORWARD
 var attack_area: Area3D
 var hit_sent := false
+var hurt_duration := .42
 var boss := false
 var variant := 0
 var enabled := true
@@ -26,14 +27,15 @@ func _ready() -> void:
  floor_snap_length = .25
  home = position
  PamArt.box_shape(self,Vector3(.55,1.4,.5),Vector3.UP*.75)
- rig = PamArt.model("assassin" if boss else ("guardian_scout" if variant == 1 else "guardian"))
+ rig = PamNpcAnimator.new()
+ rig.character = "lar" if boss else "inimigo"
  add_child(rig)
  PamArt.hurtbox(self,Vector3(.65,1.45,.6),Vector3.UP*.8)
  attack_area = Area3D.new()
  attack_area.collision_layer = 16
  attack_area.collision_mask = 8
  add_child(attack_area)
- PamArt.box_shape(attack_area,Vector3(.85,1.2,.95),Vector3.ZERO)
+ PamArt.box_shape(attack_area,Vector3(.5,.6,.55),Vector3.ZERO)
  telegraph = MeshInstance3D.new()
  var ring := TorusMesh.new()
  ring.inner_radius = .43
@@ -52,8 +54,8 @@ func _physics_process(delta: float) -> void:
  cooldown -= delta
  if dead:
   timer += delta
-  rig.rotation.z = move_toward(rig.rotation.z,1.6,delta*5)
-  rig.position.y = -timer*.6
+  rig.pose("Defeat",timer)
+  rig.position.y = -maxf(0,timer-.8)*.4
   if timer > 1: queue_free()
   return
  var to_player := player.global_position-global_position
@@ -66,7 +68,6 @@ func _physics_process(delta: float) -> void:
   timer -= delta
   velocity.x = move_toward(velocity.x,0,delta*6)
   velocity.z = move_toward(velocity.z,0,delta*6)
-  rig.rotation.z = sin(timer*25)*.18
   if timer <= 0: state = "PERSEGUIR"
  elif state == "ANTECIPACAO":
   timer += delta
@@ -79,15 +80,15 @@ func _physics_process(delta: float) -> void:
   timer += delta
   velocity.x = direction.x*2.0 if timer < .16 else 0.0
   velocity.z = direction.z*2.0 if timer < .16 else 0.0
-  if timer < .19 and not hit_sent:
+  if timer >= .08 and timer < .20 and not hit_sent:
    for area in attack_area.get_overlapping_areas():
     if area.get_parent() == player:
-     player.receive_hit(1,direction*5,"enemy")
-     hit_sent = true
+     var ray := PhysicsRayQueryParameters3D.create(global_position+Vector3.UP*.9,player.global_position+Vector3.UP*.7,1)
+     if get_world_3d().direct_space_state.intersect_ray(ray).is_empty():
+      hit_sent = player.receive_hit(1,direction*5,"enemy")
   if timer > .55:
    state = "PERSEGUIR"; cooldown = .55; telegraph.visible = false
  else:
-  rig.rotation.z = 0
   var target := home+Vector3(sin(clock*.8)*.9,0,0)
   if dist < 6.0 and player.controllable and abs(player.position.y-position.y)<2.0:
    state = "PERSEGUIR"
@@ -105,10 +106,14 @@ func _physics_process(delta: float) -> void:
    velocity.x = 0; velocity.z = 0
  velocity.y -= 25*delta
  move_and_slide()
- attack_area.position = direction*.75+Vector3.UP*.7
- attack_area.rotation.y = atan2(direction.x,direction.z)
  rig.rotation.y = lerp_angle(rig.rotation.y,atan2(direction.x,direction.z),1-exp(-12*delta))
- PamArt.pose(rig,clock,Vector2(velocity.x,velocity.z).length(),"heavy" if state in ["ANTECIPACAO","ATAQUE"] else "",clampf(timer/.55,0,1))
+ if state == "DANO": rig.pose("Hit",hurt_duration-timer)
+ elif state == "ANTECIPACAO": rig.pose("Windup",timer/.48*rig.length("Windup"))
+ elif state == "ATAQUE": rig.pose("Attack",timer/.55*rig.length("Attack"))
+ elif Vector2(velocity.x,velocity.z).length() > .2: rig.pose("Run" if state == "PERSEGUIR" else "Walk",clock*1.4)
+ else: rig.pose("Idle",clock)
+ attack_area.global_position = rig.contact_point()
+ attack_area.rotation.y = atan2(direction.x,direction.z)
  # Stomp uses actual descending feet above the hurtbox, with bounce.
  if player.velocity.y < -1 and dist < .62 and player.global_position.y > global_position.y+1.05 and player.global_position.y < global_position.y+1.65:
   if receive_hit(2,Vector3.ZERO,"stomp"): player.velocity.y = 7.0
@@ -121,6 +126,7 @@ func receive_hit(damage: int, knock: Vector3, kind: String) -> bool:
  health -= damage
  state = "DANO"
  timer = .7 if kind in ["strong","heavy"] else .42
+ hurt_duration = timer
  velocity = knock + Vector3.UP*(2.8 if kind in ["strong","heavy","kick","air"] else 1.3)
  telegraph.visible = false
  if trail:

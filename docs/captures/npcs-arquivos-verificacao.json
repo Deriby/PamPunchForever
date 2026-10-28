@@ -1,0 +1,38 @@
+{
+  "januri": {
+    "glb": {
+      "path": "assets/models/npc_januri_rig.glb",
+      "bytes": 32687104,
+      "sha256": "68c94564cba8b2d92026497efdcee4c90e656f12eafbfa251f434f9cfca5590e"
+    },
+    "blend": {
+      "path": "assets/source/npcs/januri_rig.blend",
+      "bytes": 30423786,
+      "sha256": "e5ab1e7e4988314d57641bc85ecbb97b569d5aad0d637244991b1c561b69ea64"
+    }
+  },
+  "inimigo": {
+    "glb": {
+      "path": "assets/models/npc_inimigo_rig.glb",
+      "bytes": 33358756,
+      "sha256": "41a74f59c5bdac8b526004f511bf2c12a20fd38d3492524434c6c3994a51cb1d"
+    },
+    "blend": {
+      "path": "assets/source/npcs/inimigo_rig.blend",
+      "bytes": 30795968,
+      "sha256": "a607195b3a2eeffa19b3dee905fa29151b6edd5f4eec6942981d874248eff321"
+    }
+  },
+  "lar": {
+    "glb": {
+      "path": "assets/models/npc_lar_rig.glb",
+      "bytes": 32262596,
+      "sha256": "96efeef1f505a237f8fb086947f7b551a25c909a1554a202192a9eae253a829e"
+    },
+    "blend": {
+      "path": "assets/source/npcs/lar_rig.blend",
+      "bytes": 29960470,
+      "sha256": "b1bc050429e1d888c8bedb5762152501c33504e61b9110689f1c0c13a2e171aa"
+    }
+  }
+}

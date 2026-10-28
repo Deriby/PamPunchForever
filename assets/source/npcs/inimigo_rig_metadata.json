@@ -1,0 +1,48 @@
+{
+  "source": "assets/source/npcs/inimigo_original.glb",
+  "source_sha256": "edcc775d3df8bb0912935f137e2e084391d80f5669a1bdcb5d4f40c1b00c2d19",
+  "name": "inimigo",
+  "role": "enemy",
+  "bones": 32,
+  "triangles": 50000,
+  "clips": [
+    "Idle",
+    "Guard",
+    "Walk",
+    "Run",
+    "Windup",
+    "Attack",
+    "Hit",
+    "Defeat",
+    "Power",
+    "ElbowFlex",
+    "KneeFlex"
+  ],
+  "uniform_scale": 2.1414216222870466,
+  "original_min_z": -6.965969578942577e-09,
+  "height": 1.7,
+  "weights": {
+    "heat_unweighted_repaired": 1446,
+    "protected_hands": 1261,
+    "shell": 0,
+    "hat": 0,
+    "beard": 0,
+    "tails": 3760,
+    "ribbon": 171,
+    "sheath": 0
+  },
+  "max_influences": 4,
+  "geometry_edited": false,
+  "rest_pose": "Supplied T-pose",
+  "tail_chains": {
+    "tail.L": 4,
+    "tail.R": 4
+  },
+  "rigid_accessories": [],
+  "original_pbr_preserved": true,
+  "normal_preservation": {
+    "original_float_normals_restored": true,
+    "skin_attributes_preserved": true,
+    "export_vertices": 35949
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "januri": {
+    "bones": 25,
+    "clips": [
+      "Idle",
+      "Guard",
+      "Walk",
+      "Run",
+      "Windup",
+      "Attack",
+      "Hit",
+      "Defeat",
+      "Power",
+      "ElbowFlex",
+      "KneeFlex"
+    ],
+    "packed_images": [
+      "texture_pbr_20250901",
+      "texture_pbr_20250901_metallic-texture_pbr_20250901_roughness",
+      "texture_pbr_20250901_normal"
+    ]
+  },
+  "inimigo": {
+    "bones": 32,
+    "clips": [
+      "Idle",
+      "Guard",
+      "Walk",
+      "Run",
+      "Windup",
+      "Attack",
+      "Hit",
+      "Defeat",
+      "Power",
+      "ElbowFlex",
+      "KneeFlex"
+    ],
+    "packed_images": [
+      "texture_pbr_20250901",
+      "texture_pbr_20250901_metallic-texture_pbr_20250901_roughness",
+      "texture_pbr_20250901_normal"
+    ]
+  },
+  "lar": {
+    "bones": 30,
+    "clips": [
+      "Idle",
+      "Guard",
+      "Walk",
+      "Run",
+      "Windup",
+      "Attack",
+      "Hit",
+      "Defeat",
+      "Power",
+      "ElbowFlex",
+      "KneeFlex"
+    ],
+    "packed_images": [
+      "texture_pbr_20250901",
+      "texture_pbr_20250901_metallic-texture_pbr_20250901_roughness",
+      "texture_pbr_20250901_normal"
+    ]
+  }
+}

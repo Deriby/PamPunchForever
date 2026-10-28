@@ -1,5 +1,7 @@
 # Direção visual — histórico e nova referência PS1
 
+**Atualização do elenco:** `Januri.glb` (Jaburanga), `Inimigo.glb` e `Lar.glb`, fornecidos pelo usuário, substituem os três desenhos de NPC abaixo. As malhas recebidas, texturas e acessórios são a referência ativa; foram acrescentados rigs e clipes. O mestre atual não tem cajado e Lar tem a katana embainhada. Veja [NPCS_USUARIO.md](NPCS_USUARIO.md), a prévia e os limites de skinning. As descrições e números de validação abaixo são históricos.
+
 **Diretriz atual:** o usuário substituiu os estudos anteriores pelo seu próprio GLB em T-pose. O [modelo do usuário](MODELO_USUARIO.md) é a base visual prioritária do Pam. A edição remove o rabinho e adapta o rig e os movimentos cartunescos às suas proporções. As texturas fornecidas e a forma da cabeça/corpo foram preservadas fora da reparação localizada. A construção/animação PS1 continua como referência de linguagem; este modelo não é uma recuperação de dados comerciais.
 
 O restante deste documento registra a revisão anterior. O **Pam, estudo 03**, visível em `docs/captures/pam-modelo-v3.png`, chegou a ser aprovado, mas essa aprovação foi retirada. O GLB dessa revisão foi substituído no personagem jogável pelo modelo fornecido pelo usuário. `assets/source/approved_pam.sha256` conserva apenas sua identificação histórica, sem representar aprovação vigente.

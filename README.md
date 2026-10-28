@@ -6,6 +6,8 @@ O Pam jogável usa o **modelo fornecido pelo usuário**, sem rabinho, com rig de
 
 [Prévia dos controles na fase](docs/captures/pam-combo-acao.gif) · [Vídeo](docs/captures/pam-combo-acao.mp4) · [Regras do combate](docs/COMBATE_DOIS_BOTOES.md). F5 inicia o jogo; `scenes/pam_combat_review.tscn` continua disponível para revisar os clipes com F6.
 
+**Novo elenco:** os modelos fornecidos `Januri.glb` (mestre Jaburanga), `Inimigo.glb` e `Lar.glb` já estão na fase, com skins de 25/32/30 ossos e 11 clipes cada. [Prévia animada](docs/captures/npcs-rig.gif) · [GLBs, arquivos Blender e detalhes dos rigs](docs/NPCS_USUARIO.md). Abra `scenes/npc_rig_review.tscn` com F6 para inspecionar cotovelos, joelhos e ossos.
+
 Uma primeira fase compacta, do prólogo ao antigo porto. Pam perde Jaburanga no confronto de abertura, enfrenta brevemente o assassino e inicia a jornada. A trilha ensina movimento, caixas e combate antes de introduzir ponte, raízes inclinadas, altar de checkpoint, balsa móvel, desvio secreto, fenda e arena de saída. A arena só abre após a derrota dos dois guardiões.
 
 ## Download no GitHub
@@ -40,8 +42,8 @@ O checkpoint é ativado por aproximação do altar dourado. Cura Pam e guarda a 
 - Giro → soco médio → soco forte no mesmo botão, com fila de entradas, tolerância entre toques e recuperação do finalizador. Funciona no chão e no ar. Volumes dos golpes acompanham os punhos animados, com varredura entre passos, bloqueio por paredes e um dano por alvo/golpe. Knockback, atordoamento, hitstop, estilhaços e efeitos sonoros. Inimigos patrulham, perseguem, antecipam, atacam e reagem.
 - Quique sobre inimigos/caixas, caixas quebráveis, explosivos com pavio de 3 segundos e reação em cadeia, sementes, checkpoint e amuleto secreto.
 - Camera3D sobre Curve3D própria, suavização exponencial, enquadramento de segredo, tremor e planos do prólogo.
-- Floresta com assets low-poly originais: panda de jaqueta, jabuti com chapéu/casco/cajado, guardiões, assassino, árvores com raízes e cipós, samambaias, rochas, ruínas e porto. Vegetação agrupada com MultiMesh. Paleta, iluminação, neblina, textura de solo e água animada.
-- Pam com skin e clipes de esqueleto amostrados na física; transições de pose, esticamento temporário e rastros. Animação procedural dos NPCs e pequenas sequências no motor. HUD, dicas contextuais, pausa, conclusão e depuração.
+- Elenco com modelos fornecidos pelo usuário: Pam, mestre Jaburanga, ninjas e Lar. Floresta com árvores, raízes, cipós, samambaias, rochas, ruínas e porto originais. Vegetação agrupada com MultiMesh. Paleta, iluminação, neblina, textura de solo e água animada.
+- Pam e NPCs com skins e clipes de esqueleto; transições de pose, esticamento temporário e rastros do Pam. Caudas dos ninjas articuladas, acessórios com volume rígido e pequenas sequências no motor. HUD, dicas contextuais, pausa, conclusão e depuração.
 - Áudio sintetizado original: percussão, baixo, cordas dedilhadas e camada sutil de sintetizador. **Trilha e efeitos temporários**, com gerador incluído, sujeitos a direção musical posterior.
 
 ## Testes reproduzíveis
@@ -53,6 +55,8 @@ O checkpoint é ativado por aproximação do altar dourado. Cura Pam e guarda a 
 ./tools/godot.sh --headless --fixed-fps 120 --script tests/integration.gd
 ./tools/godot.sh --headless --fixed-fps 120 --script tests/traverse.gd
 ./tools/godot.sh --headless --fixed-fps 30 --script tests/traverse.gd
+./tools/godot.sh --headless --script tools/npc/review.gd -- --validate-only
+python3 tools/npc/verify.py
 python3 tests/check_dossier.py
 ```
 
@@ -68,6 +72,6 @@ Os quatro documentos recebidos foram lidos e preservados em `references/`. [EVID
 
 ## Escopo e acabamento pendente
 
-Esta entrega é uma Fase 1 curta e jogável, não a campanha completa nem uma produção comercial finalizada. O modelo do Pam é o fornecido e aprovado pelo usuário; os NPCs e o restante da arte ainda precisam da revisão final. Os NPCs ainda precisam de revisão de animações e o Pam não tem novas expressões faciais. Não há dublagem, tela de configurações, remapeamento de teclas, gravação em disco ou exportação assinada. A música é temporária; instrumentação sintetizada não substitui gravações/direção musical final.
+Esta entrega é uma Fase 1 curta e jogável, não a campanha completa nem uma produção comercial finalizada. Pam e os três NPCs usam os modelos fornecidos pelo usuário. Os novos rigs possuem animações, mas roupas e ombros em poses extremas ainda podem precisar de pintura manual adicional de pesos; não há controle individual dos dedos nem rig facial nos NPCs. A arte e as animações aguardam revisão artística final. Não há dublagem, tela de configurações, remapeamento de teclas, gravação em disco ou exportação assinada. A música é temporária; instrumentação sintetizada não substitui gravações/direção musical final.
 
-Não houve teste manual de conforto com teclado/controle nem avaliação auditiva humana neste ambiente. A primeira importação headless sem cache emite diagnósticos internos de textura do Godot; a integração atual passou 33/33; o registro de 32/32 do ZIP extraído refere-se à versão inicial. O editor virtual também registra uma extensão Vulkan ausente; detalhes nos logs e em docs/VALIDACAO.md. No renderizador por software deste ambiente, as capturas da revisão visual atingiram cerca de 2–3 FPS; desempenho e fluidez em GPU ainda precisam ser validados. O código e as capturas não comprovam sensação de controle, qualidade artística final ou fidelidade técnica ao Crash. Esses itens requerem revisão humana. Consulte [ARTE_PENDENTE.md](docs/ARTE_PENDENTE.md) antes de tratar qualquer asset como aprovado.
+Não houve teste manual de conforto com teclado/controle nem avaliação auditiva humana neste ambiente. A primeira importação headless sem cache emite diagnósticos internos de textura do Godot; a integração atual passou 35/35, e as travessias automatizadas com os novos NPCs concluíram em 30 e 120 FPS, sem mortes. Os registros de 32/32 e 33/33 referem-se às versões anteriores. O editor virtual também registra uma extensão Vulkan ausente; detalhes nos logs e em docs/VALIDACAO.md. No renderizador por software deste ambiente, as capturas anteriores da revisão visual atingiram cerca de 2–3 FPS; desempenho e fluidez em GPU ainda precisam ser validados. O código e as capturas não comprovam sensação de controle, qualidade artística final ou fidelidade técnica ao Crash. Esses itens requerem revisão humana. Consulte [ARTE_PENDENTE.md](docs/ARTE_PENDENTE.md) antes de tratar qualquer asset como aprovado.
