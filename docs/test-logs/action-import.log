@@ -11,12 +11,12 @@ first_scan_filesystem: end
 update_scripts_classes: begin: Registering global classes... steps: 8
 	update_scripts_classes: step 0: CombatFlourish
 	update_scripts_classes: step 1: PamPlayer
-	update_scripts_classes: step 2: 
-	update_scripts_classes: step 3: 
-	update_scripts_classes: step 4: 
-	update_scripts_classes: step 5: 
-	update_scripts_classes: step 6: 
-	update_scripts_classes: step 7: 
+	update_scripts_classes: step 2:
+	update_scripts_classes: step 3:
+	update_scripts_classes: step 4:
+	update_scripts_classes: step 5:
+	update_scripts_classes: step 6:
+	update_scripts_classes: step 7:
 update_scripts_classes: end
 reimport: begin: (Re)Importing Assets steps: 1
 	reimport: step 0: Preparing files to reimport...
