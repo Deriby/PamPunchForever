@@ -1,5 +1,7 @@
 # Estado da direção de arte
 
+**Animação atual:** Pam tem 21 clipes e cada NPC tem 20, incluindo dano, subida/queda/aterrissagem e mortes. A guarda/corrida e o movimento secundário foram refinados. [Prévia e limites](ANIMACOES_VIVAS.md). As contagens de 12/11 clipes abaixo registram a revisão inicial dos rigs.
+
 **Direção atual:** o usuário forneceu seu próprio Pam em T-pose e pediu a remoção do rabinho e aplicação do rig. Esse é o modelo prioritário. A [edição e rig](MODELO_USUARIO.md) preserva sua identidade, fecha a região do rabo e possui 12 clipes. O modelo está integrado ao personagem ativo da fase, com ação para giro → médio → forte e botão de pulo. Veja [o combate atual](COMBATE_DOIS_BOTOES.md). Os estudos 03–06 anteriores são referências históricas de desenvolvimento.
 
 **Elenco atual:** os modelos fornecidos `Januri.glb`, `Inimigo.glb` e `Lar.glb` substituem os NPCs anteriores na fase e no prólogo. O mestre conserva o nome canônico Jaburanga. Os três têm skin, cotovelos, joelhos e 11 clipes; caudas e acessórios recebem ossos próprios. [Arquivos e prévia](NPCS_USUARIO.md). As versões antigas dos NPCs ficam apenas como histórico.

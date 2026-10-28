@@ -6,7 +6,7 @@ O Pam jogável usa o **modelo fornecido pelo usuário**, sem rabinho, com rig de
 
 [Prévia dos controles na fase](docs/captures/pam-combo-acao.gif) · [Vídeo](docs/captures/pam-combo-acao.mp4) · [Regras do combate](docs/COMBATE_DOIS_BOTOES.md). F5 inicia o jogo; `scenes/pam_combat_review.tscn` continua disponível para revisar os clipes com F6.
 
-**Novo elenco:** os modelos fornecidos `Januri.glb` (mestre Jaburanga), `Inimigo.glb` e `Lar.glb` já estão na fase, com skins de 25/32/30 ossos e 11 clipes cada. [Prévia animada](docs/captures/npcs-rig.gif) · [GLBs, arquivos Blender e detalhes dos rigs](docs/NPCS_USUARIO.md). Abra `scenes/npc_rig_review.tscn` com F6 para inspecionar cotovelos, joelhos e ossos.
+**Animações atuais:** Pam tem **21 clipes** e cada NPC tem **20**, com respiração, corrida, subida/queda/aterrissagem, dano e mortes visíveis. [Prévia animada](docs/captures/animacoes-vivas.gif) · [Detalhes e testes](docs/ANIMACOES_VIVAS.md). Os modelos fornecidos `Januri.glb` (mestre Jaburanga), `Inimigo.glb` e `Lar.glb` continuam ativos com skins de 25/32/30 ossos. [GLBs e fontes Blender](docs/NPCS_USUARIO.md). Abra as cenas de revisão com F6 para conferir os movimentos.
 
 Uma primeira fase compacta, do prólogo ao antigo porto. Pam perde Jaburanga no confronto de abertura, enfrenta brevemente o assassino e inicia a jornada. A trilha ensina movimento, caixas e combate antes de introduzir ponte, raízes inclinadas, altar de checkpoint, balsa móvel, desvio secreto, fenda e arena de saída. A arena só abre após a derrota dos dois guardiões.
 
@@ -56,6 +56,8 @@ O checkpoint é ativado por aproximação do altar dourado. Cura Pam e guarda a 
 ./tools/godot.sh --headless --fixed-fps 120 --script tests/traverse.gd
 ./tools/godot.sh --headless --fixed-fps 30 --script tests/traverse.gd
 ./tools/godot.sh --headless --script tools/npc/review.gd -- --validate-only
+./tools/godot.sh --headless --fixed-fps 120 --script tests/animation_states.gd
+./tools/godot.sh --headless --fixed-fps 30 --script tests/animation_states.gd
 python3 tools/npc/verify.py
 python3 tests/check_dossier.py
 ```

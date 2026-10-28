@@ -395,8 +395,7 @@ func begin_aftermath() -> void:
  player.health = 1
  player.position = Vector3(0,.1,.8)
  player.velocity = Vector3.ZERO
- player.knocked_out = true
- player.rig.rotation.z = 1.1
+ player.enter_knockout()
  camera.cinematic = true
  camera.fixed_position = Vector3(3,1.6,3.7)
  camera.fixed_target = Vector3(0,.6,-1.5)
@@ -465,8 +464,11 @@ func on_player_died() -> void:
   begin_aftermath()
   return
  if mode != "play": return
+ # Keep the impact, collapse and settling visible before fading/respawning.
+ await get_tree().create_timer(1.3).timeout
+ if not is_instance_valid(player) or mode != "play" or not player.respawning: return
  hud.fade.color.a = .8
- await get_tree().create_timer(.7).timeout
+ await get_tree().create_timer(.25).timeout
  player.reset_at(checkpoint)
  player.controllable = true
  hud.fade.color.a = 0

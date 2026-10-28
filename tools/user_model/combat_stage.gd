@@ -64,7 +64,7 @@ func _ready() -> void:
 		layer.add_child(caption)
 		var help := Label.new()
 		help.position = Vector2(25,58)
-		help.text = "Revisão: 1 Combo   2 Giro   3 Médio   4 Forte   5 Pulo   0 T-pose\nEspaço: pausar   ← →: quadro   V: frente / lado"
+		help.text = "1 Combo   2 Giro   3 Médio   4 Forte   5 Pulo   6 Dano   7 Morte   8 Queda   9 Corrida\nEspaço: pausar   ← →: quadro   V: frente / lado   0 T-pose"
 		help.add_theme_font_size_override("font_size",16)
 		layer.add_child(help)
 	sample("Combo",0)
@@ -94,7 +94,7 @@ func _process(delta: float) -> void:
 func _unhandled_key_input(event: InputEvent) -> void:
 	if not event is InputEventKey or not event.pressed or event.echo:
 		return
-	var keys := {KEY_1:"Combo",KEY_2:"Spin",KEY_3:"Medium",KEY_4:"Strong",KEY_5:"Jump"}
+	var keys := {KEY_1:"Combo",KEY_2:"Spin",KEY_3:"Medium",KEY_4:"Strong",KEY_5:"Jump",KEY_6:"Hit",KEY_7:"Death",KEY_8:"Fall",KEY_9:"Run"}
 	if keys.has(event.keycode):
 		paused = false
 		sample(keys[event.keycode],0)

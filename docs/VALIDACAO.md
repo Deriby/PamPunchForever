@@ -1,5 +1,7 @@
 # Verificação atual: elenco fornecido com rig
 
+**Revisão atual de animação:** 21 clipes no Pam, 20 por NPC, **18/18 testes de estados em cada execução a 30/120 FPS**, além de 35/35 de integração, 20/20 de combate em ambas as taxas e travessia completa sem mortes em ambas. Prévia, comandos, preservação da arte e limites: [ANIMACOES_VIVAS.md](ANIMACOES_VIVAS.md). Os resultados abaixo registram as etapas anteriores.
+
 Mestre (`Januri.glb`), inimigo e Lar têm skins nativas, cotovelos, joelhos, acessórios e caudas articuladas, e já substituem o elenco anterior na fase. No Godot 4.4.1: **35/35 testes de integração**, **20/20 de combate em cada execução a 30/120 FPS** e travessia integral nas duas taxas, **0 mortes e 6 inimigos derrotados**. Verificação independente da geometria/UVs/normais/texturas e reabertura das três fontes Blender também passaram. Prévia, comandos, logs e limites: [NPCS_USUARIO.md](NPCS_USUARIO.md). As imagens são renders reais; não houve avaliação manual com controle ou GPU dedicada.
 
 # Histórico: combate de dois botões

@@ -38,6 +38,13 @@ var attack_hits := 0
 var input_override := false
 var test_motion := Vector2.ZERO
 var trail: Node
+var air_clock := 0.0
+var air_clip := ""
+var landing_clock := 10.0
+var hurt_duration := .4
+var hurt_clip := "Hit"
+var death_clock := 0.0
+var death_clip := "Death"
 
 func _ready() -> void:
 	collision_layer = 2
@@ -136,6 +143,9 @@ func advance_combo(delta: float) -> void:
 
 func _physics_process(delta: float) -> void:
 	clock += delta
+	if respawning or knocked_out:
+		update_defeat(delta)
+		return
 	invulnerable = maxf(0,invulnerable-delta)
 	stun = maxf(0,stun-delta)
 	var was_floor := is_on_floor()
@@ -184,17 +194,59 @@ func _physics_process(delta: float) -> void:
 			velocity.y = 0
 		if is_on_floor() and not was_floor:
 			landings += 1
+			landing_clock = 0
 			if trail:
 				trail.impact(global_position+Vector3.UP*.05,Color("bbaa77"),5,.6)
 	rig.rotation.y = atan2(facing.x,facing.z) if not attack.is_empty() else lerp_angle(rig.rotation.y,atan2(facing.x,facing.z),1-exp(-18*delta))
-	rig.position.y = -.12 if knocked_out else 0.0
-	rig.rotation.z = 1.4 if knocked_out else (sin(stun*30)*.13 if stun > 0 else 0.0)
-	rig.visible = not respawning and (invulnerable <= 0 or int(clock*22)%2 == 0)
-	rig.sample_state(attack,attack_clock,delta,Vector2(velocity.x,velocity.z).length(),not is_on_floor())
+	rig.position.y = 0
+	rig.rotation.z = 0
+	# The initial recoil stays readable before the invulnerability blink begins.
+	rig.visible = stun > 0 or invulnerable <= 0 or int(clock*22)%2 == 0
+	update_animation(delta)
 	update_hitboxes()
 	state = "DANO" if stun > 0 else (MOVES.move(attack)["label"] if not attack.is_empty() else ("AR" if not is_on_floor() else ("CORRIDA" if movement.length() > .1 else "IDLE")))
 	if global_position.y < -7 and not respawning:
 		die()
+
+func update_animation(delta: float) -> void:
+	landing_clock += delta
+	var speed := Vector2(velocity.x,velocity.z).length()
+	if stun > 0:
+		rig.sample_motion(hurt_clip,hurt_duration-stun,delta)
+	elif not attack.is_empty():
+		rig.sample_state(attack,attack_clock,delta,speed,not is_on_floor())
+	elif not is_on_floor():
+		var clip := "Rise" if velocity.y > .2 else ("DeathFall" if global_position.y < -1.2 else "Fall")
+		if air_clip != clip: air_clock = 0
+		air_clip = clip
+		air_clock += delta
+		rig.sample_motion(clip,air_clock,delta,clip == "Fall")
+	elif landing_clock < .24:
+		rig.sample_motion("Land",landing_clock,delta)
+		air_clip = ""
+	else:
+		air_clip = ""
+		rig.sample_state("",0,delta,speed,false)
+
+func update_defeat(delta: float) -> void:
+	death_clock += delta
+	velocity.x = move_toward(velocity.x,0,delta*8)
+	velocity.z = move_toward(velocity.z,0,delta*8)
+	if not is_on_floor(): velocity.y = maxf(velocity.y-tuning.gravity*delta,-tuning.terminal_speed)
+	move_and_slide()
+	rig.visible = true
+	rig.rotation.z = 0
+	rig.position.y = 0
+	rig.sample_motion(death_clip,death_clock,delta)
+	state = "DERROTADO" if knocked_out else "MORTO"
+
+func enter_knockout() -> void:
+	controllable = false
+	respawning = false
+	knocked_out = true
+	death_clock = 0
+	death_clip = "Death"
+	cancel_combo()
 
 func update_hitboxes() -> void:
 	var move := MOVES.move(attack) if not attack.is_empty() else {}
@@ -251,12 +303,14 @@ func query_strike(before: Vector3, after: Vector3, radius: float, move: Dictiona
 			attack_hits += 1
 			struck.emit(target,attack)
 
-func receive_hit(damage: int, knock: Vector3, _kind: String = "enemy") -> bool:
+func receive_hit(damage: int, knock: Vector3, kind: String = "enemy") -> bool:
 	if invulnerable > 0 or respawning or not controllable:
 		return false
 	health -= damage
 	invulnerable = 1.25
-	stun = .32
+	hurt_clip = "HitHeavy" if damage > 1 or kind in ["strong","heavy","explosion"] else "Hit"
+	hurt_duration = .64 if hurt_clip == "HitHeavy" else .4
+	stun = hurt_duration
 	velocity = knock+Vector3.UP*4.0
 	cancel_combo()
 	health_changed.emit()
@@ -273,6 +327,8 @@ func die() -> void:
 		return
 	respawning = true
 	controllable = false
+	death_clock = 0
+	death_clip = "DeathFall" if global_position.y < -1.2 else "Death"
 	cancel_combo()
 	died.emit()
 
@@ -284,5 +340,9 @@ func reset_at(point: Vector3) -> void:
 	respawning = false
 	invulnerable = 1.0
 	stun = 0
+	death_clock = 0
+	landing_clock = 10
+	air_clock = 0
+	air_clip = ""
 	cancel_combo()
 	health_changed.emit()

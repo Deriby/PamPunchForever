@@ -15,6 +15,7 @@ scene = bpy.context.scene
 rig.animation_data.action = None
 for track in rig.animation_data.nla_tracks:
     track.mute = True
+actions = {track.name:track.strips[0].action for track in rig.animation_data.nla_tracks}
 hands = {side: [v for v in body.data.vertices if s*v.co.x/scale >= .455 and .43 < v.co.z/scale < .66]
          for side,s in [('L',-1),('R',1)]}
 mixed = {}
@@ -23,8 +24,8 @@ for side, vertices in hands.items():
         body.vertex_groups[v.groups[0].group].name != 'hand.'+side)
 worst = 1.0
 worst_pose = None
-for clip in ['Guard','Jab','Cross','Kick','Combo','Spin','Run','Medium','Strong','Jump']:
-    action = bpy.data.actions['PamUser_'+clip]
+for clip in ['Guard','Jab','Cross','Kick','Combo','Spin','Run','Medium','Strong','Jump','Rise','Fall','Land','Hit','HitHeavy','Death','DeathBack','DeathFall']:
+    action = actions[clip]
     rig.animation_data.action = action
     # Include the transitions between baked keys, where inherited scale can shear.
     for half in range(round(action.frame_range[1])*2+1):
@@ -39,7 +40,7 @@ for clip in ['Guard','Jab','Cross','Kick','Combo','Spin','Run','Medium','Strong'
 
 metrics = {}
 for clip,frame,side in [('Jab',6,'R'),('Cross',7,'L'),('Kick',9,'R'),('Spin',15,'R'),('Medium',6,'R'),('Strong',9,'L')]:
-    rig.animation_data.action = bpy.data.actions['PamUser_'+clip]
+    rig.animation_data.action = actions[clip]
     scene.frame_set(frame)
     if clip == 'Kick':
         vertices = [v for v in body.data.vertices if v.co.x > 0 and v.co.z/scale < .09]

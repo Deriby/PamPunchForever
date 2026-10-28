@@ -1,0 +1,21 @@
+Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org
+
+PASS grounded resting player samples the breathing guard
+PASS real jump selects rising animation
+PASS jump apex switches to falling animation
+PASS collision landing plays compression and recovery
+PASS landing returns to breathing guard
+PASS damage recoils visibly before invulnerability blinking
+PASS heavy damage selects the stronger full-body recoil
+PASS fatal damage plays a visible death instead of hiding Pam
+PASS death prevents attacks and clears queued combo inputs
+PASS death reaches and holds a fallen skeletal pose
+PASS respawn clears the death pose and returns control
+PASS ordinary enemy visibly reacts to a medium strike
+PASS enemy completes the normal collapse before removal
+PASS defeated enemy cannot receive another damaging hit
+PASS completed enemy defeat settles before corpse removal
+PASS strong enemy hit uses a distinct recoil
+PASS strong finisher selects backward defeat with physical knockback
+PASS void death uses the falling defeat animation
+ANIMATION_STATES_RESULT 18/18 passed

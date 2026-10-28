@@ -1,0 +1,92 @@
+{
+  "januri": {
+    "bones": 25,
+    "clips": [
+      "ElbowFlex",
+      "KneeFlex",
+      "Guard",
+      "Run",
+      "JumpStart",
+      "Rise",
+      "Fall",
+      "Land",
+      "Hit",
+      "HitHeavy",
+      "Death",
+      "DeathBack",
+      "DeathFall",
+      "Jump",
+      "Idle",
+      "Walk",
+      "Windup",
+      "Attack",
+      "Power",
+      "Defeat"
+    ],
+    "packed_images": [
+      "texture_pbr_20250901",
+      "texture_pbr_20250901_metallic-texture_pbr_20250901_roughness",
+      "texture_pbr_20250901_normal"
+    ]
+  },
+  "inimigo": {
+    "bones": 32,
+    "clips": [
+      "ElbowFlex",
+      "KneeFlex",
+      "Guard",
+      "Run",
+      "JumpStart",
+      "Rise",
+      "Fall",
+      "Land",
+      "Hit",
+      "HitHeavy",
+      "Death",
+      "DeathBack",
+      "DeathFall",
+      "Jump",
+      "Idle",
+      "Walk",
+      "Windup",
+      "Attack",
+      "Power",
+      "Defeat"
+    ],
+    "packed_images": [
+      "texture_pbr_20250901",
+      "texture_pbr_20250901_metallic-texture_pbr_20250901_roughness",
+      "texture_pbr_20250901_normal"
+    ]
+  },
+  "lar": {
+    "bones": 30,
+    "clips": [
+      "ElbowFlex",
+      "KneeFlex",
+      "Guard",
+      "Run",
+      "JumpStart",
+      "Rise",
+      "Fall",
+      "Land",
+      "Hit",
+      "HitHeavy",
+      "Death",
+      "DeathBack",
+      "DeathFall",
+      "Jump",
+      "Idle",
+      "Walk",
+      "Windup",
+      "Attack",
+      "Power",
+      "Defeat"
+    ],
+    "packed_images": [
+      "texture_pbr_20250901",
+      "texture_pbr_20250901_metallic-texture_pbr_20250901_roughness",
+      "texture_pbr_20250901_normal"
+    ]
+  }
+}

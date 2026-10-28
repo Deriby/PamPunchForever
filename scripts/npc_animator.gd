@@ -29,8 +29,9 @@ func discover(node: Node) -> void:
 func length(clip: String) -> float:
 	return player.get_animation(clip).length
 
-func pose(clip: String, time: float, transition: bool = true) -> void:
+func pose(clip: String, time: float, transition: bool = true, delta: float = -1.0) -> void:
 	assert(player.has_animation(clip),"Missing NPC clip "+clip)
+	time = maxf(0,time)
 	var changed := clip != current_clip or time < previous_time
 	if changed:
 		blend_from.clear()
@@ -40,9 +41,9 @@ func pose(clip: String, time: float, transition: bool = true) -> void:
 		blend_clock = 0
 		current_clip = clip
 	else:
-		blend_clock += maxf(0,time-previous_time)
+		blend_clock += maxf(0,time-previous_time) if delta < 0 else delta
 	previous_time = time
-	var sample_time := fmod(time,length(clip)) if clip in ["Idle","Guard","Walk","Run"] else clampf(time,0,length(clip))
+	var sample_time := fmod(time,length(clip)) if clip in ["Idle","Guard","Walk","Run","Fall"] else clampf(time,0,length(clip))
 	player.play(clip)
 	player.seek(sample_time,true)
 	player.pause()

@@ -56,7 +56,7 @@ func _ready() -> void:
 	ui.add_child(caption)
 	var help := Label.new()
 	help.position = Vector2(24,50)
-	help.text = "1 Guarda   2 Andar   3 Correr   4 Soco   5 Golpe forte   6 Reação   7 Derrota\n8 Cotovelo   9 Joelho   0 T-pose   B Ossos   V Girar   Espaço Pausar   ← → Quadro"
+	help.text = "1 Guarda   2 Andar   3 Correr   4 Soco   5 Golpe forte   6 Reação   7 Derrota\n8 Cotovelo   9 Joelho   0 T-pose   B Ossos   V Girar   Espaço Pausar   ← → Quadro\nH Dano forte   J Pulo   F Queda   L Aterrissagem   D Derrota para trás"
 	help.add_theme_font_size_override("font_size",16)
 	ui.add_child(help)
 	var names := HBoxContainer.new()
@@ -96,7 +96,7 @@ func _process(delta: float) -> void:
 
 func _unhandled_key_input(event: InputEvent) -> void:
 	if not event is InputEventKey or not event.pressed or event.echo: return
-	var clips := {KEY_1:"Guard",KEY_2:"Walk",KEY_3:"Run",KEY_4:"Attack",KEY_5:"Power",KEY_6:"Hit",KEY_7:"Defeat",KEY_8:"ElbowFlex",KEY_9:"KneeFlex",KEY_0:""}
+	var clips := {KEY_1:"Guard",KEY_2:"Walk",KEY_3:"Run",KEY_4:"Attack",KEY_5:"Power",KEY_6:"Hit",KEY_7:"Defeat",KEY_8:"ElbowFlex",KEY_9:"KneeFlex",KEY_0:"",KEY_H:"HitHeavy",KEY_J:"Jump",KEY_F:"Fall",KEY_L:"Land",KEY_D:"DeathBack"}
 	if clips.has(event.keycode):
 		clip = clips[event.keycode]
 		clock = 0

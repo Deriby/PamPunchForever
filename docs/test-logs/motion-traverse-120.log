@@ -1,0 +1,9 @@
+Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org
+
+ROUTE 0 pos (0.0, 0.2, -5.0) health 5
+ROUTE 3 pos (0.289017, -0.019057, -24.72707) health 5
+ROUTE 6 pos (0.548919, 0.230841, -45.15504) health 5
+ROUTE 10 pos (0.668028, 0.430832, -65.37167) health 5
+ROUTE 13 pos (-2.736267, 0.130942, -83.47469) health 5
+ROUTE 15 pos (-0.996958, 0.130941, -97.49751) health 5
+ROUTE RESULT mode=ending deaths=0 checkpoint=true kills=6 seeds=27 jumps=4 hits=20

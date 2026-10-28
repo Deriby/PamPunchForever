@@ -1,5 +1,7 @@
 # Pam — modelo fornecido pelo usuário, sem rabo e com rig
 
+**Biblioteca atual: 21 clipes**, com respiração/corrida, dano, subida/queda/aterrissagem e morte integrados à fase. Veja [ANIMACOES_VIVAS.md](ANIMACOES_VIVAS.md); as contagens e verificações das revisões anteriores abaixo são históricas.
+
 O usuário enviou `5d3ee866736f057f78c3c146b673b7a2.glb` em T-pose e pediu a remoção do rabinho e aplicação do rig. Esse modelo substitui os estudos visuais anteriores como base do Pam. A autoria do visual e das texturas é do material fornecido pelo usuário; a edição, pesos e adaptação das animações foram feitos neste projeto.
 
 ![Antes e depois da remoção](captures/pam-usuario-sem-rabo.png)

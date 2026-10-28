@@ -13,7 +13,8 @@ for role,expected in [('januri',25),('inimigo',32),('lar',30)]:
     rig = bpy.data.objects['NpcRig']
     assert rig.type == 'ARMATURE' and len(rig.data.bones) == expected
     clips = [track.name for track in rig.animation_data.nla_tracks]
-    assert len(clips) == 11 and 'Attack' in clips and 'KneeFlex' in clips
+    metadata = json.loads((ROOT/f'assets/source/npcs/{role}_rig_metadata.json').read_text())
+    assert set(clips) == set(metadata['clips']) and 'Attack' in clips and 'KneeFlex' in clips
     images = [im for im in bpy.data.images if im.source == 'FILE']
     assert len(images) >= 3
     assert all(im.packed_file is not None and tuple(im.size) == (4096,4096) for im in images)

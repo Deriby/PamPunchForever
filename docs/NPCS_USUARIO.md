@@ -1,5 +1,7 @@
 # Rigs dos modelos fornecidos
 
+**Atualização de animação:** cada NPC agora tem **20 clipes**, com novas reações, pulo/queda/aterrissagem e variantes de morte. Os arquivos desta página estão atualizados; a biblioteca inicial de 11 clipes é registrada abaixo como histórico. Consulte [ANIMACOES_VIVAS.md](ANIMACOES_VIVAS.md) para a prévia e os testes atuais.
+
 Os três GLBs recebidos sem esqueleto agora têm skin, cotovelos, joelhos e clipes nativos de animação. São as malhas ativas no prólogo e nos inimigos da fase. `Januri.glb` foi associado ao mestre **Jaburanga**, mantendo o nome canônico da história; **Lar** assume o papel do assassino. As duas variantes de IA dos inimigos comuns usam o mesmo modelo fornecido.
 
 ![Elenco com rig](captures/npcs-rig.gif)

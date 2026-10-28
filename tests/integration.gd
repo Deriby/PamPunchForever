@@ -51,7 +51,7 @@ func run() -> void:
  check(p.controllable and game.assassin.enabled,"opening includes controllable confrontation")
  game.begin_aftermath()
  await ticks(3)
- check(p.knocked_out and p.rig.rotation.z>1,"forced defeat holds a knocked-down pose")
+ check(p.knocked_out and p.rig.current_clip == "Death" and p.rig.rotation.z == 0,"forced defeat plays the skeletal collapse without rotating the wrapper")
  game.mode_clock = 7
  await ticks(4)
  check(game.mode == "play" and p.controllable,"forced defeat transitions into the trail")
@@ -167,7 +167,7 @@ func run() -> void:
  check(game.checkpoint_set and p.health==p.max_health,"checkpoint proximity heals and saves location")
  p.invulnerable = 0
  p.global_position.y = -8
- await ticks(125)
+ await ticks(220)
  check(not p.respawning and p.position.distance_to(game.checkpoint)<.6 and p.health==p.max_health,"fall death returns to saved checkpoint")
  # Ride actual moving collision body; require floor and transport, not an open port/PID.
  p.global_position = game.moving_platform.global_position+Vector3.UP*.2

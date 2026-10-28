@@ -1,0 +1,23 @@
+Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org
+
+PASS approved supplied rig is the active player
+PASS J/X action and Space/A jump
+PASS obsolete gameplay buttons removed
+PASS holding action produces one spin, no automatic combo
+PASS rapid presses preserve the order without skipping the medium punch
+PASS three early taps queue the whole combo on the same button
+PASS finisher recovery cannot be bypassed by mashing
+PASS completed combo restarts at spin
+PASS short gap between taps preserves the combo
+PASS expired combo grace restarts at spin
+PASS each physical stroke damages a hurtbox once, including both spin hands
+PASS finisher produces a stronger physical reaction
+PASS medium punch does not damage beyond its visible reach
+PASS long strong punch physically reaches the farther hurtbox
+PASS solid wall blocks damage from extended fists
+PASS no damage outside actual swept fist volumes
+PASS damage cancels queued stages and temporary stretch
+PASS first action after damage starts a fresh combo
+PASS same action and jump work together in the air
+PASS respawn clears combo progress and queued inputs
+ACTION_COMBAT_RESULT 20/20 passed

@@ -20,6 +20,13 @@ var variant := 0
 var enabled := true
 var dead := false
 var telegraph: MeshInstance3D
+var hurt_clip := "Hit"
+var death_clip := "Defeat"
+var last_hit_kind := ""
+var air_clock := 0.0
+var air_clip := ""
+var landing_clock := 10.0
+var locomotion_clock := 0.0
 
 func _ready() -> void:
  collision_layer = 4
@@ -54,10 +61,16 @@ func _physics_process(delta: float) -> void:
  cooldown -= delta
  if dead:
   timer += delta
-  rig.pose("Defeat",timer)
-  rig.position.y = -maxf(0,timer-.8)*.4
-  if timer > 1: queue_free()
+  velocity.x = move_toward(velocity.x,0,delta*8)
+  velocity.z = move_toward(velocity.z,0,delta*8)
+  if not is_on_floor(): velocity.y = maxf(velocity.y-25*delta,-24)
+  move_and_slide()
+  rig.pose(death_clip,timer,true,delta)
+  var end := rig.length(death_clip)
+  rig.position.y = -maxf(0,timer-end-.4)*.55
+  if timer > end+.85: queue_free()
   return
+ var was_floor := is_on_floor()
  var to_player := player.global_position-global_position
  to_player.y = 0
  var dist := to_player.length()
@@ -93,7 +106,7 @@ func _physics_process(delta: float) -> void:
   if dist < 6.0 and player.controllable and abs(player.position.y-position.y)<2.0:
    state = "PERSEGUIR"
    target = player.global_position
-   if dist < 1.25 and cooldown <= 0:
+   if dist < 1.25 and cooldown <= 0 and is_on_floor():
     state = "ANTECIPACAO"; timer = 0
   else: state = "PATRULHA"
   var desired := target-global_position
@@ -106,12 +119,27 @@ func _physics_process(delta: float) -> void:
    velocity.x = 0; velocity.z = 0
  velocity.y -= 25*delta
  move_and_slide()
+ if is_on_floor() and not was_floor: landing_clock = 0
+ landing_clock += delta
+ var speed := Vector2(velocity.x,velocity.z).length()
+ locomotion_clock += delta*(.3+speed*.85)
  rig.rotation.y = lerp_angle(rig.rotation.y,atan2(direction.x,direction.z),1-exp(-12*delta))
- if state == "DANO": rig.pose("Hit",hurt_duration-timer)
- elif state == "ANTECIPACAO": rig.pose("Windup",timer/.48*rig.length("Windup"))
- elif state == "ATAQUE": rig.pose("Attack",timer/.55*rig.length("Attack"))
- elif Vector2(velocity.x,velocity.z).length() > .2: rig.pose("Run" if state == "PERSEGUIR" else "Walk",clock*1.4)
- else: rig.pose("Idle",clock)
+ if state == "DANO": rig.pose(hurt_clip,hurt_duration-timer,true,delta)
+ elif state == "ANTECIPACAO": rig.pose("Windup",timer/.48*rig.length("Windup"),true,delta)
+ elif state == "ATAQUE": rig.pose("Attack",timer/.55*rig.length("Attack"),true,delta)
+ elif not is_on_floor():
+  var clip := "Rise" if velocity.y > .2 else "Fall"
+  if air_clip != clip: air_clock = 0
+  air_clip = clip
+  air_clock += delta
+  rig.pose(clip,air_clock,true,delta)
+ elif landing_clock < .24: rig.pose("Land",landing_clock,true,delta)
+ elif speed > .2:
+  air_clip = ""
+  rig.pose("Run" if state == "PERSEGUIR" else "Walk",locomotion_clock,true,delta)
+ else:
+  air_clip = ""
+  rig.pose("Idle",clock+absf(home.z)*.13,true,delta)
  attack_area.global_position = rig.contact_point()
  attack_area.rotation.y = atan2(direction.x,direction.z)
  # Stomp uses actual descending feet above the hurtbox, with bounce.
@@ -124,8 +152,10 @@ func receive_hit(damage: int, knock: Vector3, kind: String) -> bool:
   if trail: trail.impact(global_position+Vector3.UP,Color("f4c47e"),9,.8)
   return true
  health -= damage
+ last_hit_kind = kind
  state = "DANO"
- timer = .7 if kind in ["strong","heavy"] else .42
+ hurt_clip = "HitHeavy" if kind in ["strong","heavy","kick","explosion"] else "Hit"
+ timer = .64 if hurt_clip == "HitHeavy" else .4
  hurt_duration = timer
  velocity = knock + Vector3.UP*(2.8 if kind in ["strong","heavy","kick","air"] else 1.3)
  telegraph.visible = false
@@ -139,6 +169,7 @@ func receive_hit(damage: int, knock: Vector3, kind: String) -> bool:
 func finish() -> void:
  if dead: return
  dead = true
+ death_clip = "DeathFall" if global_position.y < -1.2 else ("DeathBack" if last_hit_kind in ["strong","heavy","kick","explosion"] else "Defeat")
  timer = 0
  collision_layer = 0
  defeated.emit()

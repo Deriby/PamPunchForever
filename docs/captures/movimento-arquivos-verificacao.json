@@ -1,0 +1,50 @@
+{
+  "pam": {
+    "glb": {
+      "path": "assets/models/pam_usuario_rig.glb",
+      "bytes": 29242084,
+      "sha256": "f7ca9e3e1db2283e0d1b3d7b94e3e4db8e0a3c34529919a153f264169cd50c91"
+    },
+    "blend": {
+      "path": "assets/source/pam_usuario_rig.blend",
+      "bytes": 30386943,
+      "sha256": "d2438e4f4e6da7371b5dda3cc02484c56f72841960a3bf426acc815b0ea0ac36"
+    }
+  },
+  "januri": {
+    "glb": {
+      "path": "assets/models/npc_januri_rig.glb",
+      "bytes": 33374452,
+      "sha256": "c549ce4e8c469cb56b8a707b0fef10f7c00d2cd0fb14bbf82d737c6eab190799"
+    },
+    "blend": {
+      "path": "assets/source/npcs/januri_rig.blend",
+      "bytes": 32798197,
+      "sha256": "d37c7600fdf098345fb572258e5a6b396edab058b15d7e371d13237f49af4a84"
+    }
+  },
+  "inimigo": {
+    "glb": {
+      "path": "assets/models/npc_inimigo_rig.glb",
+      "bytes": 34322324,
+      "sha256": "ff11c21003fe34761b0a55658ced05cab101150112d94943aeccb9f4d802fcef"
+    },
+    "blend": {
+      "path": "assets/source/npcs/inimigo_rig.blend",
+      "bytes": 34378205,
+      "sha256": "73d50c3522154df864a92a5e1c913519962d2b87b50615b9bebc293b7ba43f22"
+    }
+  },
+  "lar": {
+    "glb": {
+      "path": "assets/models/npc_lar_rig.glb",
+      "bytes": 33130404,
+      "sha256": "6e6423fa5565f48344d1eec3c700dba9cf682ba879b2ae22275bf88d79d90afc"
+    },
+    "blend": {
+      "path": "assets/source/npcs/lar_rig.blend",
+      "bytes": 33103913,
+      "sha256": "d75194776bf03c10b33d58bd19270aa22f29d2167b9889328a53c600ee2105f8"
+    }
+  }
+}
